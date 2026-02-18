@@ -213,3 +213,28 @@ svg line {
     stroke-dashoffset: 0;
   }
 }
+
+/* Archer line draw animation */
+.archer-line {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: draw-line 0.7s ease-out forwards;
+}
+
+@keyframes draw-line {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Dot pop animation */
+.dot-hidden {
+  opacity: 0;
+  transform: scale(0.4);
+}
+
+.dot-visible {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
