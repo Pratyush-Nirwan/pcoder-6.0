@@ -59,6 +59,13 @@ function NavBar() {
                         }
                     >
                         Works
+                    </NavLink><NavLink
+                        to="/guestbook"
+                        className={({ isActive }) =>
+                            `${base} ${isActive ? active : inactive}`
+                        }
+                    >
+                        Guestbook
                     </NavLink>
                 </div>
             </div>

@@ -223,8 +223,12 @@ function About() {
                     </a>
 
                     <span className="font-bold">Resume</span>
-                    <a href="#" className="ND text-white/60 hover:text-white">
-                        Resume_15-02-2026.pdf
+                    <a
+                        href="/Resume_04-03-2026.pdf"
+                        download
+                        className="ND text-white/60 hover:text-white"
+                    >
+                        Resume_04-03-2026.pdf
                     </a>
                 </div>
             </div>
