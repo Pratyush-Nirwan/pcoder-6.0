@@ -52,17 +52,20 @@ const timelineData = [
     { year: "2023", text: "Started with HTML, CSS, JavaScript" },
 ];
 
+
 function About() {
     return (
         <div className="relative z-10 flex flex-col w-full h-full pt-24 gap-6 px-10 overflow-auto no-scrollbar">
-
+            <Spotlight />
             {/* TIMELINE */}
-            <div className="about-timeline absolute right-10 top-1/2 -translate-y-1/2">
+            <div className="about-timeline absolute right-10 top-1/2 -translate-y-1/2 fade-in">
                 <ArcherContainer
                     strokeColor="white"
                     strokeWidth={1}
                     offset={10}
-                    svgContainerStyle={{ pointerEvents: 'none', overflow: 'visible' }}
+                    svgContainerStyle={{
+                        pointerEvents: 'none', overflow: 'visible'
+                    }}
                 >
                     {timelineData.map((item, index) => (
                         <div
@@ -91,7 +94,10 @@ function About() {
                                             }]
                                     }
                                 >
-                                    <span className="text-xl leading-none text-white">
+                                    <span className="text-xl leading-none text-white fade-in"
+                                        style={{
+                                            animationDelay: `${(timelineData.length - 1 - index) * 200}ms`
+                                        }}>
                                         <GoDotFill />
                                     </span>
                                 </ArcherElement>
@@ -124,19 +130,44 @@ function About() {
 
             <Spotlight />
 
-            <h1 className="SG font-extrabold text-5xl text-white fade-in">
-                Pratyush Nirwan
-            </h1>
+            <div className="flex flex-col gap-1">
+                <Spotlight.Target mode="inline" className="w-fit">
+                    <pre className="ND">
+                        <code className="font-inherit">{`<h1>`}</code>
+                    </pre>
+                </Spotlight.Target>
 
-            <p className="SG fade-in [--delay:100ms]">
-                I build things at the intersection of code, design, and curiosity. <br />
-                Music on repeat, hands on the keyboard, always learning by doing. <br />
-                BTech Computer Technology @ YCCE, Nagpur. <br />
-                Got an idea? I’d love to work on it with you.
-                <br /><br />
-                Radhe Radhe 🤍
-            </p>
+                <h1 className="SG font-extrabold text-5xl text-white fade-in">
+                    Pratyush Nirwan
+                </h1>
 
+                <Spotlight.Target mode="inline" className="w-fit">
+                    <pre className="ND">
+                        <code className="font-inherit">{`</h1>`}</code>
+                    </pre>
+                </Spotlight.Target>
+
+                <Spotlight.Target mode="inline" className="w-fit">
+                    <pre className="ND">
+                        <code className="font-inherit">{`<p>`}</code>
+                    </pre>
+                </Spotlight.Target>
+
+                <p className="SG fade-in [--delay:100ms]">
+                    I build things at the intersection of code, design, and curiosity. <br />
+                    Music on repeat, hands on the keyboard, always learning by doing. <br />
+                    BTech Computer Technology @ YCCE, Nagpur. <br />
+                    Got an idea? I’d love to work on it with you.
+                    <br /><br />
+                    Radhe Radhe 🤍
+                </p>
+
+                <Spotlight.Target mode="inline" className="w-fit">
+                    <pre className="ND">
+                        <code className="font-inherit">{`</p>`}</code>
+                    </pre>
+                </Spotlight.Target>
+            </div>
             {/* LOGO LOOP */}
             <div className="absolute bottom-1 left-0 w-full fade-in [--delay:500ms]">
                 <LogoLoop
@@ -154,7 +185,25 @@ function About() {
             </div>
 
             {/* CONTACT CARD */}
-            <div className="absolute bottom-0 right-0 z-10 bg-black p-5 rounded-tl-3xl">
+            <div className="absolute bottom-0 right-0 z-10 bg-black p-5 rounded-tl-3xl corner-br
+              before:absolute 
+              before:content-[''] 
+              before:w-10 
+              before:h-10
+              before:bottom-0 
+              before:-left-10 
+              before:rounded-br-3xl
+              before:shadow-[0.5rem_0.8rem_black]
+                
+              after:absolute
+              after:content-['']
+              after:h-10
+              after:w-10
+              after:-top-10
+              after:right-0
+              after:rounded-br-3xl
+            after:shadow-[0.5rem_0.8rem_black]
+">
                 <div className="grid grid-cols-[auto_1fr] gap-x-10 gap-y-3 SG">
                     <span className="font-bold">Email</span>
                     <a href="mailto:pratyushnirwan@gmail.com" className="ND text-white/60 hover:text-white">
@@ -180,7 +229,7 @@ function About() {
                 </div>
             </div>
 
-        </div>
+        </div >
     );
 }
 

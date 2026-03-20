@@ -11,7 +11,7 @@ function Home() {
                     </pre>
                 </Spotlight.Target>
 
-                <h1 className="SG font-extrabold text-7xl scale-[2] origin-left fade-in">
+                <h1 className="SG font-extrabold text-7xl origin-left fade-in">
                     Pratyush Nirwan
                 </h1>
                 <Spotlight.Target mode="inline" className="w-fit">
@@ -33,6 +33,7 @@ function Home() {
                     </pre>
                 </Spotlight.Target>
             </div>
+
 
             <div
                 className="absolute bottom-0 right-0 z-10 bg-black p-5 rounded-tl-3xl

@@ -3,22 +3,27 @@ import NavBar from "./NavBar";
 import Spotlight from "./Spotlight";
 import Grainient from "./Grainient";
 import SpotifyRp from "./Spotify";
-
+import Dither from "./Dither"
+import Iridescence from './Iridescence';
+import Silk from './Silk';
 function Layout() {
     const location = useLocation();
     const isAboutPage = location.pathname === "/about";
-
+    const isWorkPage = location.pathname === "/works";
     return (
-        <div className="fixed inset-2 bg-black rounded-3xl flex flex-col overflow-hidden">
+        <div className="fixed inset-0 pt-3 pb-3 pl-2 pr-2 bg-black rounded-3xl flex flex-col overflow-hidden">
             <Spotlight />
             <NavBar />
 
             <div id="sandbox" className="relative flex w-full h-full rounded-3xl bg-black">
                 <div
                     className={
-                        isAboutPage
-                            ? "fixed bottom-0 left-0 z-20 fade-in [--delay:1s] bg-black p-6.5 flex items-center justify-center rounded-tr-3xl\n             before:absolute \n             before:content-[''] \n             before:w-10 \n             before:h-10\n          before:-top-10\n          before:left-2 \n          before:rounded-bl-3xl\n          before:shadow-[-0.5rem_0.8rem_black] corner-bl\n          \n           after:absolute \n             after:content-[''] \n             after:w-10 \n            \n             after:h-10\n          after:bottom-2\n          after:-right-10 \n          after:rounded-bl-3xl\n          after:shadow-[-0.5rem_0.8rem_black] corafter\n            "
-                            : "fixed bottom-7 left-8 z-20 fade-in [--delay:1s]"
+                        isWorkPage
+                            ? "hidden"
+                            : isAboutPage
+                                ? "fixed bottom-0 left-0 z-20 fade-in [--delay:1s] bg-black p-6.5 flex items-center justify-center rounded-tr-3xl\n             before:absolute \n             before:content-[''] \n             before:w-10 \n             before:h-10\n          before:-top-10\n          before:left-2 \n          before:rounded-bl-3xl\n          before:shadow-[-0.5rem_0.8rem_black] corner-bl\n          \n           after:absolute \n             after:content-[''] \n             after:w-10 \n            \n             after:h-10\n          after:bottom-2\n          after:-right-10 \n          after:rounded-bl-3xl\n          after:shadow-[-0.5rem_0.8rem_black] corafter\n            "
+                                : "fixed bottom-7 left-8 z-20 fade-in [--delay:1s]"
+
                     }
                 >
                     <SpotifyRp />
@@ -28,16 +33,17 @@ function Layout() {
                     <Outlet />
                 </div>
 
-                <div className="absolute inset-0 z-0 overflow-hidden rounded-2xl">
+                <div className="absolute inset-0 z-0 overflow-hidden rounded-3xl">
+
                     <Grainient
-                        color1="#FF9FFC"
-                        color2="#5227FF"
+                        color1="#FF0AAC"
+                        color2="#383838"
                         color3="#B19EEF"
-                        timeSpeed={0.25}
+                        timeSpeed={0.3}
                         colorBalance={0}
-                        warpStrength={10}
+                        warpStrength={5}
                         warpFrequency={5}
-                        warpSpeed={3}
+                        warpSpeed={1}
                         warpAmplitude={50}
                         blendAngle={0}
                         blendSoftness={0.05}
