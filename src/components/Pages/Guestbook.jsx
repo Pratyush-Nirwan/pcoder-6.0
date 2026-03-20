@@ -239,7 +239,7 @@ function Guestbook({ selectedPage }) {
             <div className="min-h-screen p-10">
                 <div className="columns-3 gap-5 space-y-5 mt-10">
                     {/* CTA / Auth Card — always top-left */}
-                    <div className="break-inside-avoid bg-black/50 backdrop-blur rounded-2xl p-5 flex flex-col gap-3 transition-all duration-300">
+                    <div className="break-inside-avoid bg-black/50 backdrop-blur rounded-2xl p-5 flex flex-col gap-3 transition-all duration-300 fade-in">
                         {renderCtaCard()}
                     </div>
 
@@ -251,10 +251,10 @@ function Guestbook({ selectedPage }) {
                     ) : (
                         messages
                             .filter((msg) => msg.username !== usernameLower)
-                            .map((msg) => (
+                            .map((msg, idx) => (
                                 <div
                                     key={msg.id}
-                                    className="break-inside-avoid bg-black/50 backdrop-blur rounded-2xl p-5 flex flex-col gap-3 transition-all duration-300"
+                                    className={`break-inside-avoid bg-black/50 backdrop-blur rounded-2xl p-5 flex flex-col gap-3 transition-all duration-300 fade-in [--delay:${(idx + 1) * 100}ms]`}
                                 >
                                     <div className="text-white text-2xl font-extrabold">~/{msg.username}</div>
                                     <p className="text-white leading-snug text-xl ND">{msg.message}</p>
