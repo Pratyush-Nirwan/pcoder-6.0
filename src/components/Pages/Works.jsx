@@ -7,9 +7,9 @@ import { PiMouseScroll } from "react-icons/pi";
 
 import projectsData from "../../assets/Projects.json";
 import savestride from "../../assets/save-stride.png";
-
+import { worksState } from "../worksState";
 function Works() {
-    const TITLE_ROW_PX = 56; // Tailwind h-14 (3.5rem)
+    const TITLE_ROW_PX = 56;
 
     const projects = useMemo(
         () =>
@@ -25,6 +25,7 @@ function Works() {
             })),
         []
     );
+    worksState.totalProjects = projects.length;
 
     const containerRef = useRef(null);
     const sectionRefs = useRef([]);
@@ -33,6 +34,12 @@ function Works() {
         const idx = projects.findIndex((p) => p.name.toLowerCase() === "save stride");
         return idx >= 0 ? idx : 0;
     });
+
+    const scrollToIndex = (idx) => {
+        const el = sectionRefs.current[idx];
+        if (!el) return;
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
 
     useEffect(() => {
         if (!containerRef.current) return;
@@ -46,7 +53,10 @@ function Works() {
                     .sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0))[0];
                 if (!visible?.target) return;
                 const idx = Number(visible.target.getAttribute("data-project-index"));
-                if (!Number.isNaN(idx)) setActiveIndex(idx);
+                if (!Number.isNaN(idx)) {
+                    setActiveIndex(idx);
+                    worksState.activeIndex = idx;
+                }
             },
             {
                 root,
@@ -62,12 +72,6 @@ function Works() {
     const previousProject = projects[activeIndex - 1] ?? null;
     const nextProject = projects[activeIndex + 1] ?? null;
 
-    const scrollToIndex = (idx) => {
-        const el = sectionRefs.current[idx];
-        if (!el) return;
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-    };
-
     const projectImage = currentProject?.name?.toLowerCase() === "save stride" ? savestride : null;
     const techLower = (currentProject?.tech_stack ?? "").toLowerCase();
     const showReact = techLower.includes("react");
@@ -76,10 +80,11 @@ function Works() {
 
     return (
         <div
+            id="works-scroll-container"
             ref={containerRef}
             className="relative z-10 w-full h-full pt-24 overflow-y-auto no-scrollbar snap-y snap-mandatory"
         >
-            <div className="fixed flex top-[10vh] flex-col items-center left-1/2 -translate-x-1/2 fade-in">
+            <div className="fixed flex top-[11vh] flex-col items-center left-1/2 -translate-x-1/2 fade-in">
                 <h1 className="ND text-4xl opacity-70 -translate-x-1">Scroll</h1>
                 <PiMouseScroll size={30} className="opacity-70 animate-bounce" />
             </div>
@@ -90,7 +95,7 @@ function Works() {
                         style={{ transform: `translateY(${-activeIndex * TITLE_ROW_PX}px)` }}
                     >
                         {reelItems.map((p, reelIdx) => {
-                            const idx = reelIdx - 1; // map reel index back to projects index
+                            const idx = reelIdx - 1;
                             const isSpacer = !p;
                             const isActive = !isSpacer && idx === activeIndex;
                             const isNeighbor = !isSpacer && Math.abs(idx - activeIndex) === 1;
@@ -140,7 +145,6 @@ function Works() {
                     data-project-index={idx}
                     className="relative min-h-[calc(100vh-6rem)] snap-start"
                 >
-                    {/* scroll anchor only */}
                 </section>
             ))}
 
@@ -153,7 +157,6 @@ function Works() {
           after:bottom-0 after:-right-10 after:rounded-bl-3xl
           after:shadow-[-0.5rem_0.8rem_black]
       corner-bl
-
             ">
                 <div className="flex gap-20 items-center absolute -top-15 left-7">
                     <a
@@ -174,14 +177,12 @@ function Works() {
                     >
                         GITHUB <MdArrowOutward size={20} />
                     </a>
-
                     <span className="cursor-pointer hover:underline font-semibold fade-in [--delay:600ms]">TECH
                         <span className="flex gap-3">
                             {showReact && <FaReact size={20} />}
                             {showTailwind && <RiTailwindCssFill size={20} />}
                         </span>
                     </span>
-
                 </div>
                 {projectImage ? (
                     <img
@@ -198,4 +199,3 @@ function Works() {
 }
 
 export default Works;
-

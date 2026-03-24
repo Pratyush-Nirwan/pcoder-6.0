@@ -1,0 +1,1 @@
+export const worksState = { activeIndex: 0, totalProjects: 0 };

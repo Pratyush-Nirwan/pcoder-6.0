@@ -1,4 +1,5 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import NavBar from "./NavBar";
 import Spotlight from "./Spotlight";
 import Grainient from "./Grainient";
@@ -6,10 +7,48 @@ import SpotifyRp from "./Spotify";
 import Dither from "./Dither"
 import Iridescence from './Iridescence';
 import Silk from './Silk';
+import { worksState } from "./worksState";
+
 function Layout() {
     const location = useLocation();
+    const navigate = useNavigate();
+    const lastWheelNavAt = useRef(0);
+    const routeOrder = ["/", "/about", "/works", "/guestbook"];
     const isAboutPage = location.pathname === "/about";
     const isWorkPage = location.pathname === "/works";
+
+    useEffect(() => {
+        const onWheel = (event) => {
+            const direction = Math.sign(event.deltaY);
+            if (direction === 0) return;
+
+            const now = Date.now();
+            if (now - lastWheelNavAt.current < 700) return;
+
+            const currentIndex = routeOrder.indexOf(location.pathname);
+            if (currentIndex === -1) return;
+
+            if (location.pathname === "/works") {
+                const atFirst = worksState.activeIndex === 0;
+                const atLast = worksState.activeIndex === worksState.totalProjects - 1;
+
+                if ((direction > 0 && !atLast) || (direction < 0 && !atFirst)) return;
+            }
+
+            const nextIndex = currentIndex + direction;
+            if (nextIndex < 0 || nextIndex >= routeOrder.length) return;
+
+            event.preventDefault();
+            lastWheelNavAt.current = now;
+            navigate(routeOrder[nextIndex]);
+        };
+
+        window.addEventListener("wheel", onWheel, { passive: false });
+        return () => {
+            window.removeEventListener("wheel", onWheel);
+        };
+    }, [location.pathname, navigate]);
+
     return (
         <div className="fixed inset-0 pt-3 pb-3 pl-2 pr-2 bg-black rounded-3xl flex flex-col overflow-hidden">
             <Spotlight />
@@ -34,7 +73,6 @@ function Layout() {
                 </div>
 
                 <div className="absolute inset-0 z-0 overflow-hidden rounded-3xl">
-
                     <Grainient
                         color1="#FF0AAC"
                         color2="#383838"
