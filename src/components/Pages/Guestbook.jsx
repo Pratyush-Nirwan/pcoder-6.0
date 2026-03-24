@@ -193,7 +193,7 @@ function Guestbook({ selectedPage }) {
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
                         placeholder="Write your message..."
-                        className="bg-transparent border-b border-white/30 text-white text-sm font-mono outline-none placeholder:text-white/40 py-1 ND"
+                        className="bg-transparent border-b border-white/30 text-white text-xl font-mono outline-none placeholder:text-white/40 py-1 ND"
                     />
                     <div className="flex items-center gap-3 mt-1">
                         <MdCheckCircle
