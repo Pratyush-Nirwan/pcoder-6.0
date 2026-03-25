@@ -11,7 +11,9 @@ import {
     IoLogoVercel,
     IoLogoNpm,
 } from "react-icons/io5";
-
+import { MdEmail } from "react-icons/md"
+import { FaLinkedin, FaGithub } from "react-icons/fa"
+import { HiDocumentText } from "react-icons/hi"
 import {
     SiMongodb,
     SiPostman,
@@ -48,17 +50,17 @@ const techLogos = [
 const timelineData = [
     { year: "Now", text: "Building production-grade projects & open to collaborations" },
     { year: "2025", text: "Focused on UX, performance, animations, real-world polish" },
-    { year: "2024", text: "Built React apps (Weather Wise, UI redesigns)" },
-    { year: "2023", text: "Started with HTML, CSS, JavaScript" },
+    { year: "2024", text: "Built Websites with React.js" },
+    { year: "2022", text: "Started with HTML, CSS, JavaScript" },
 ];
 
 
 function About() {
     return (
-        <div className="relative z-10 flex flex-col w-full h-full pt-24 gap-6 px-10 overflow-auto no-scrollbar">
+        <div className="relative z-10 flex flex-col w-full h-full pt-10 md:pt-24 gap-6 px-10 overflow-auto no-scrollbar text-justify">
             <Spotlight />
             {/* TIMELINE */}
-            <div className="about-timeline absolute right-10 top-1/2 -translate-y-1/2 fade-in">
+            <div className="about-timeline absolute md:right-10 md:top-1/2 md:-translate-y-1/2 fade-in scale-0">
                 <ArcherContainer
                     strokeColor="white"
                     strokeWidth={1}
@@ -133,27 +135,27 @@ function About() {
             <div className="flex flex-col gap-1">
                 <Spotlight.Target mode="inline" className="w-fit">
                     <pre className="ND">
-                        <code className="font-inherit">{`<h1>`}</code>
+                        <code className="font-inherit hidden md:block">{`<h1>`}</code>
                     </pre>
                 </Spotlight.Target>
 
-                <h1 className="SG font-extrabold text-5xl text-white fade-in">
+                <h1 className="SG font-extrabold text-5xl text-white fade-in hidden md:inline">
                     Pratyush Nirwan
                 </h1>
 
                 <Spotlight.Target mode="inline" className="w-fit">
-                    <pre className="ND">
+                    <pre className="ND hidden md:block">
                         <code className="font-inherit">{`</h1>`}</code>
                     </pre>
                 </Spotlight.Target>
 
                 <Spotlight.Target mode="inline" className="w-fit">
-                    <pre className="ND">
+                    <pre className="ND hidden md:block">
                         <code className="font-inherit">{`<p>`}</code>
                     </pre>
                 </Spotlight.Target>
 
-                <p className="SG fade-in [--delay:100ms]">
+                <p className="SG fade-in [--delay:100ms] text-xs md:text-base">
                     I build things at the intersection of code, design, and curiosity. <br />
                     Music on repeat, hands on the keyboard, always learning by doing. <br />
                     BTech Computer Technology @ YCCE, Nagpur. <br />
@@ -164,37 +166,63 @@ function About() {
 
                 <Spotlight.Target mode="inline" className="w-fit">
                     <pre className="ND">
-                        <code className="font-inherit">{`</p>`}</code>
+                        <code className="font-inherit hidden md:block">{`</p>`}</code>
                     </pre>
                 </Spotlight.Target>
             </div>
+
             {/* LOGO LOOP */}
             <div className="absolute bottom-1 left-0 w-full fade-in [--delay:500ms]">
-                <LogoLoop
-                    logos={techLogos}
-                    speed={40}
-                    direction="left"
-                    logoHeight={40}
-                    gap={60}
-                    hoverSpeed={0}
-                    scaleOnHover
-                    fadeOut={false}
-                    ariaLabel="Skills"
-                    className="opacity-90"
-                />
+                <div className="md:hidden">
+                    <LogoLoop
+                        logos={techLogos}
+                        speed={40}
+                        direction="left"
+                        logoHeight={26}
+                        gap={30}
+                        hoverSpeed={0}
+                        scaleOnHover
+                        fadeOut={false}
+                        ariaLabel="Skills"
+                        className="opacity-90"
+                    />
+                </div>
+
+                {/* desktop */}
+                <div className="hidden md:block">
+                    <LogoLoop
+                        logos={techLogos}
+                        speed={40}
+                        direction="left"
+                        logoHeight={40}
+                        gap={60}
+                        hoverSpeed={0}
+                        scaleOnHover
+                        fadeOut={false}
+                        ariaLabel="Skills"
+                        className="opacity-90"
+                    />
+                </div>
+
             </div>
 
             {/* CONTACT CARD */}
-            <div className="absolute bottom-0 right-0 z-10 bg-black p-5 rounded-tl-3xl corner-br
+            <div className="
+            absolute bottom-1/2 translate-y-1/2 md:translate-y-0 md:bottom-0 right-0 z-10 bg-black p-5 rounded-tl-3xl rounded-bl-3xl md:rounded-bl-none corner-br
               before:absolute 
               before:content-[''] 
               before:w-10 
               before:h-10
-              before:bottom-0 
-              before:-left-10 
-              before:rounded-br-3xl
-              before:shadow-[0.5rem_0.8rem_black]
-                
+              before:-bottom-10
+              md:before:bottom-0 
+              before:right-0
+              md:before:-left-10 
+              before:rounded-tr-3xl
+              md:before:rounded-br-3xl
+              before:shadow-[0.5rem_-0.8rem_black]
+              md:before:shadow-[0.5rem_0.8rem_black]
+            
+
               after:absolute
               after:content-['']
               after:h-10
@@ -204,7 +232,13 @@ function About() {
               after:rounded-br-3xl
             after:shadow-[0.5rem_0.8rem_black]
 ">
-                <div className="grid grid-cols-[auto_1fr] gap-x-10 gap-y-3 SG">
+                <div className="flex flex-col md:hidden items-center gap-6 text-2xl text-white">
+                    <a href="mailto:pratyushnirwan@gmail.com"><MdEmail /></a>
+                    <a href="https://www.linkedin.com/in/pratyush-nirwan/" target="_blank"><FaLinkedin /></a>
+                    <a href="https://github.com/pratyush-nirwan" target="_blank"><FaGithub /></a>
+                    <a href="/Resume_04-03-2026.pdf" download><HiDocumentText /></a>
+                </div>
+                <div className="hidden md:grid grid-cols-[auto_1fr] gap-x-10 gap-y-3 SG">
                     <span className="font-bold">Email</span>
                     <a href="mailto:pratyushnirwan@gmail.com" className="ND text-white/60 hover:text-white">
                         pratyushnirwan@gmail.com

@@ -13,7 +13,7 @@ function NavBar() {
     return (
         <div
             id="navbar"
-            className="SG absolute z-20 flex justify-between items-center w-full h-15 left-0 "
+            className="SG absolute z-20 md:flex justify-between items-center w-full h-15 left-0 hidden "
         >
             {/* LEFT FILL */}
             <div
