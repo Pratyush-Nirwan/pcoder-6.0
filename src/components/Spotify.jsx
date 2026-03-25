@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 
 const Equalizer = () => (
-    <div className="flex items-end gap-[3px] h-4">
-        <span className="w-[3px] bg-white/80 rounded-sm animate-eq1" />
-        <span className="w-[3px] bg-white/80 rounded-sm animate-eq2" />
-        <span className="w-[3px] bg-white/80 rounded-sm animate-eq3" />
+    <div className="flex items-end gap-0.5 md:gap-0.75 h-3 md:h-4 ">
+        <span className="w-0.75 bg-white/80 rounded-sm animate-eq1" />
+        <span className="w-0.75 bg-white/80 rounded-sm animate-eq2" />
+        <span className="w-0.75 bg-white/80 rounded-sm animate-eq3" />
     </div>
 );
 
@@ -43,12 +43,15 @@ const SpotifyRp = () => {
     if (!track) return null;
 
     return (
-        <div className="mt-0 flex items-center gap-3 text-sm tracking-wide text-white/70 z-20 SG">
+        <div className="mt-0 flex items-center gap-2 md:gap-3 text-xs md:text-sm tracking-wide text-white/70 z-20 SG ">
             <Equalizer />
-            <span className="truncate max-w-[28rem]">
-                {" "}
+            <span className="flex flex-col md:block md:truncate md:max-w-md">
                 <span className="text-white mt-0">{track}</span>
-                <span className="text-white/50 mt-0"> • {artist}</span>
+
+                <span className="text-white/50 mt-0">
+                    <span className="hidden md:inline"> • </span>
+                    {artist}
+                </span>
             </span>
         </div>
     );

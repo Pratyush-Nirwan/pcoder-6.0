@@ -4,31 +4,31 @@ function Home() {
     return (
         <>
             <Spotlight />
-            <div className="relative z-10 flex flex-col justify-center gap-2 pl-10 h-full">
+            <div className="relative z-10 flex flex-col mt-[10vh] md:mt-0 md:justify-center gap-2  p-5 md:pl-10 h-full">
                 <Spotlight.Target mode="inline" className="w-fit">
-                    <pre className="ND">
+                    <pre className="ND hidden md:block">
                         <code className="font-inherit">{`<h1>`}</code>
                     </pre>
                 </Spotlight.Target>
 
-                <h1 className="SG font-extrabold text-7xl origin-left fade-in">
+                <h1 className="SG font-extrabold text-6xl md:text-7xl origin-left fade-in text-center md:text-left">
                     Pratyush Nirwan
                 </h1>
                 <Spotlight.Target mode="inline" className="w-fit">
-                    <pre className="ND">
+                    <pre className="ND hidden md:block">
                         <code className="font-inherit">{`</h1>`}</code>
                     </pre>
                 </Spotlight.Target>
                 <Spotlight.Target mode="inline" className="w-fit">
-                    <pre className="ND">
+                    <pre className="ND hidden md:block">
                         <code className="font-inherit">{`<h2>`}</code>
                     </pre>
                 </Spotlight.Target>
-                <h2 className="SG font-medium text-4xl  origin-left fade-in [--delay:100ms] text-white/70">
+                <h2 className="SG font-medium md:text-4xl  origin-left fade-in [--delay:100ms] text-white/70 text-center md:text-left">
                     Designing & building expressive web interfaces
                 </h2>
                 <Spotlight.Target mode="inline" className="w-fit">
-                    <pre className="ND">
+                    <pre className="ND hidden md:block">
                         <code className="font-inherit">{`</h2>`}</code>
                     </pre>
                 </Spotlight.Target>
@@ -50,7 +50,7 @@ function Home() {
             </div>
 
             <div className="z-20 flex fixed bottom-5 right-27">
-                <p className="ND text-2xl absolute text-nowrap -translate-x-30 translate-y-10 -rotate-20 fade-in [--delay:200ms]">Lets Work Together</p>
+                <p className="ND text-xl md:text-2xl absolute text-nowrap translate-x-10 translate-y-7 md:-translate-x-30 md:translate-y-10 -rotate-20 fade-in [--delay:200ms]">Lets Work Together</p>
                 <Arrow />
             </div>
         </>

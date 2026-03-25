@@ -3,7 +3,7 @@ function Arrow() {
         <svg
             viewBox="0 0 800 800"
             xmlns="http://www.w3.org/2000/svg"
-            className="w-32 h-32 text-white/70 z-20 opacity-70"
+            className="w-32 h-32 text-white/70 z-20 opacity-70 translate-x-5 translate-y-5 scale-50 md:translate-x-0 md:translate-y-0 md:scale-100"
             fill="none"
         >
             <defs>
