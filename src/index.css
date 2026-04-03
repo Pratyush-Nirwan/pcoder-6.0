@@ -44,6 +44,16 @@ body {
   }
 }
 
+/* hide scrollbars globally but keep scrolling (wheel / touch / keyboard) */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
 /* hide scrollbars but keep scrolling functionality */
 .no-scrollbar {
   -ms-overflow-style: none;
