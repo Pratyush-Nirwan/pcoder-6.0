@@ -194,7 +194,7 @@ function GuestBook({ selectedPage }) {
                         </div>
                     </div>
                 ) : (
-                    <div className="grid items-center gap-2 uppercase text-xs"
+                    <div className="grid items-center gap-3 uppercase text-xs"
                         style={{ gridTemplateColumns: "150px 14px 1fr 180px" }}>
                         <span className="font-bold">~/{usernameLower}</span>
                         <span className="text-center">:</span>
@@ -215,7 +215,7 @@ function GuestBook({ selectedPage }) {
                     .filter(msg => msg.username !== usernameLower)
                     .map(msg => (
                         <div key={msg.id}
-                            className="grid items-center gap-2 uppercase"
+                            className="md:grid items-center gap-2 uppercase"
                             style={{ gridTemplateColumns: "150px 14px 1fr 180px" }}>
                             <span className="font-bold">~/{msg.username}</span>
                             <span className="text-center">:</span>

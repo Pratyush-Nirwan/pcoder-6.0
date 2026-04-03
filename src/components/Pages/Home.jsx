@@ -1,5 +1,6 @@
 import Arrow from "./Arrow";
 import Spotlight from "../Spotlight";
+import { MdOutlineSwipeVertical } from "react-icons/md";
 function Home() {
     return (
         <>
@@ -34,7 +35,9 @@ function Home() {
                 </Spotlight.Target>
             </div>
 
-
+            <div className="fixed left-1/2 bottom-50 SG font-extrabold -translate-x-1/2 flex flex-col items-center gap-5 fade-in [--delay:1000ms] md:hidden">
+                <MdOutlineSwipeVertical size={40} className="animate-bounce opacity-50" />
+            </div>
             <div
                 className="absolute bottom-0 right-0 z-10 bg-black p-5 rounded-tl-3xl
           before:absolute before:content-[''] before:w-10 before:h-10

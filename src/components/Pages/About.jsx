@@ -53,14 +53,19 @@ const timelineData = [
     { year: "2024", text: "Built Websites with React.js" },
     { year: "2022", text: "Started with HTML, CSS, JavaScript" },
 ];
-
+const compressedTimelineData = [
+    { year: "Now", text: "Building" },
+    { year: "2025", text: "Polish UX" },
+    { year: "2024", text: "React Dev" },
+    { year: "2022", text: "Started Web" },
+];
 
 function About() {
     return (
         <div className="relative z-10 flex flex-col w-full h-full pt-10 md:pt-24 gap-6 px-10 overflow-auto no-scrollbar text-justify">
             <Spotlight />
             {/* TIMELINE */}
-            <div className="about-timeline absolute md:right-10 md:top-1/2 md:-translate-y-1/2 fade-in scale-0">
+            <div className="about-timeline absolute md:right-10 md:top-1/2 md:-translate-y-1/2 fade-in md:scale-100 hidden md:inline">
                 <ArcherContainer
                     strokeColor="white"
                     strokeWidth={1}
@@ -130,6 +135,27 @@ function About() {
                 </ArcherContainer>
             </div>
 
+            <div className="fixed bottom-0 flex flex-col">
+                {timelineData.slice(0, 2).map((item, index) => (
+                    <div key={index} className="flex flex-row-reverse gap-5">
+
+                        {/* Right: dot + line */}
+                        <div className="flex flex-col items-center">
+                            <GoDotFill size={20} className="shrink-0" />
+                            {index !== 1 && (
+                                <div className="w-px flex-1 bg-white my-1" />
+                            )}
+                        </div>
+
+                        {/* Left: text */}
+                        <div className="flex flex-col pb-6 text-right">
+                            <span>{item.year}</span>
+                            <span>{item.text}</span>
+                        </div>
+
+                    </div>
+                ))}
+            </div>
             <Spotlight />
 
             <div className="flex flex-col gap-1">

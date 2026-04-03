@@ -216,7 +216,7 @@ function Guestbook({ selectedPage }) {
             <>
                 <div className="text-white text-2xl font-extrabold">~/{usernameLower}</div>
                 <p className="text-white leading-snug text-xl ND">{userMessage}</p>
-                <div className="flex items-center gap-3 mt-1">
+                <div className="flexitems-center gap-3 mt-1">
                     <TiDelete
                         size={22}
                         className="text-white cursor-pointer hover:text-white/70 transition-colors"
@@ -236,31 +236,34 @@ function Guestbook({ selectedPage }) {
     return (
         <>
             <Spotlight />
-            <div className="min-h-screen p-10">
-                <div className="columns-3 gap-5 space-y-5 mt-10">
-                    {/* CTA / Auth Card — always top-left */}
-                    <div className="break-inside-avoid bg-black/50 backdrop-blur rounded-2xl p-5 flex flex-col gap-3 transition-all duration-300 fade-in">
+            <div className="h-full min-h-0 flex flex-col p-4 md:p-10 md:pt-10">
+                <div className="flex flex-col md:flex-row md:items-start gap-3 md:gap-5 flex-1 min-h-0">
+                    {/* CTA / Auth Card — fixed; messages scroll beside / below */}
+                    <div className="shrink-0 w-full md:max-w-sm bg-black/50 backdrop-blur rounded-2xl p-5 flex flex-col gap-3 transition-all duration-300 fade-in">
                         {renderCtaCard()}
                     </div>
 
-                    {/* Guest messages */}
-                    {!isLoaded ? (
-                        <div className="break-inside-avoid bg-black/50 backdrop-blur rounded-2xl p-5 flex items-center justify-center">
-                            <CgSpinner className="text-white animate-spin text-2xl" />
-                        </div>
-                    ) : (
-                        messages
-                            .filter((msg) => msg.username !== usernameLower)
-                            .map((msg, idx) => (
-                                <div
-                                    key={msg.id}
-                                    className={`break-inside-avoid bg-black/50 backdrop-blur rounded-2xl p-5 flex flex-col gap-3 transition-all duration-300 fade-in [--delay:${(idx + 1) * 100}ms]`}
-                                >
-                                    <div className="text-white text-2xl font-extrabold">~/{msg.username}</div>
-                                    <p className="text-white leading-snug text-xl ND">{msg.message}</p>
+                    <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain pr-1 md:pr-0 [scrollbar-gutter:stable]">
+                        <div className="columns-1 md:columns-3 gap-3 md:gap-5 space-y-3 md:space-y-5">
+                            {!isLoaded ? (
+                                <div className="break-inside-avoid bg-black/50 backdrop-blur rounded-2xl p-5 flex items-center justify-center min-h-[120px]">
+                                    <CgSpinner className="text-white animate-spin text-2xl" />
                                 </div>
-                            ))
-                    )}
+                            ) : (
+                                messages
+                                    .filter((msg) => msg.username !== usernameLower)
+                                    .map((msg, idx) => (
+                                        <div
+                                            key={msg.id}
+                                            className={`break-inside-avoid bg-black/50 backdrop-blur rounded-2xl p-5 flex flex-col gap-3 transition-all duration-300 fade-in [--delay:${(idx + 1) * 100}ms]`}
+                                        >
+                                            <div className="text-white md:text-2xl font-extrabold">~/{msg.username}</div>
+                                            <p className="text-white leading-snug md:text-xl ND">{msg.message}</p>
+                                        </div>
+                                    ))
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

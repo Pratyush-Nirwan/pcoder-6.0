@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { motion } from "motion/react";
 
 import { MdArrowOutward } from "react-icons/md";
 import { FaReact } from "react-icons/fa";
@@ -8,6 +9,11 @@ import { PiMouseScroll } from "react-icons/pi";
 import projectsData from "../../assets/Projects.json";
 import savestride from "../../assets/save-stride.png";
 import { worksState } from "../worksState";
+
+const titleMotionTransitionDesktop = { type: "tween", duration: 0.5, ease: [0.33, 1, 0.68, 1] };
+/** Shorter on small screens so tweens finish before the next snap / index change */
+const titleMotionTransitionMobile = { type: "tween", duration: 0.32, ease: [0.4, 0, 0.2, 1] };
+
 function Works() {
     const TITLE_ROW_PX = 56;
 
@@ -35,6 +41,39 @@ function Works() {
         return idx >= 0 ? idx : 0;
     });
 
+    const activeIndexRef = useRef(activeIndex);
+    useEffect(() => {
+        activeIndexRef.current = activeIndex;
+    }, [activeIndex]);
+
+    const [isMobile, setIsMobile] = useState(() =>
+        typeof window !== "undefined" ? window.matchMedia("(max-width: 767px)").matches : false
+    );
+    const [prefersReducedMotion, setPrefersReducedMotion] = useState(() =>
+        typeof window !== "undefined" ? window.matchMedia("(prefers-reduced-motion: reduce)").matches : false
+    );
+
+    useEffect(() => {
+        const mq = window.matchMedia("(max-width: 767px)");
+        const sync = () => setIsMobile(mq.matches);
+        mq.addEventListener("change", sync);
+        return () => mq.removeEventListener("change", sync);
+    }, []);
+
+    useEffect(() => {
+        const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const sync = () => setPrefersReducedMotion(mq.matches);
+        mq.addEventListener("change", sync);
+        return () => mq.removeEventListener("change", sync);
+    }, []);
+
+    const titleTransition = useMemo(() => {
+        if (prefersReducedMotion) return { type: "tween", duration: 0 };
+        return isMobile ? titleMotionTransitionMobile : titleMotionTransitionDesktop;
+    }, [isMobile, prefersReducedMotion]);
+
+    const activeTitleScale = isMobile ? 1.75 : 2.35;
+
     const scrollToIndex = (idx) => {
         const el = sectionRefs.current[idx];
         if (!el) return;
@@ -42,35 +81,82 @@ function Works() {
     };
 
     useEffect(() => {
-        if (!containerRef.current) return;
-        if (!projects.length) return;
-
         const root = containerRef.current;
-        const observer = new IntersectionObserver(
-            (entries) => {
-                const visible = entries
-                    .filter((e) => e.isIntersecting)
-                    .sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0))[0];
-                if (!visible?.target) return;
-                const idx = Number(visible.target.getAttribute("data-project-index"));
-                if (!Number.isNaN(idx)) {
-                    setActiveIndex(idx);
-                    worksState.activeIndex = idx;
-                }
-            },
-            {
-                root,
-                threshold: [0.55, 0.65, 0.75],
-            }
-        );
+        if (!root || !projects.length) return;
 
-        sectionRefs.current.forEach((el) => el && observer.observe(el));
-        return () => observer.disconnect();
+        /** Content-space math only — avoids N× getBoundingClientRect per frame on mobile */
+        const computeBestIdx = () => {
+            const center = root.scrollTop + root.clientHeight * 0.5;
+            let bestIdx = 0;
+            let bestDist = Infinity;
+            sectionRefs.current.forEach((el, idx) => {
+                if (!el) return;
+                const mid = el.offsetTop + el.offsetHeight / 2;
+                const d = Math.abs(mid - center);
+                if (d < bestDist) {
+                    bestDist = d;
+                    bestIdx = idx;
+                }
+            });
+            return bestIdx;
+        };
+
+        const commitIndex = (idx) => {
+            if (idx === activeIndexRef.current) return;
+            activeIndexRef.current = idx;
+            worksState.activeIndex = idx;
+            setActiveIndex(idx);
+        };
+
+        let rafId = 0;
+        let throttleUntil = 0;
+        const THROTTLE_MS = 110;
+
+        const flushScroll = () => {
+            if (rafId) return;
+            rafId = requestAnimationFrame(() => {
+                rafId = 0;
+                const bestIdx = computeBestIdx();
+                const now = Date.now();
+                if (bestIdx !== activeIndexRef.current && now >= throttleUntil) {
+                    throttleUntil = now + THROTTLE_MS;
+                    commitIndex(bestIdx);
+                }
+            });
+        };
+
+        const onScrollEnd = () => {
+            throttleUntil = 0;
+            commitIndex(computeBestIdx());
+        };
+
+        let idleTimer = null;
+        const onScroll = () => {
+            flushScroll();
+            clearTimeout(idleTimer);
+            idleTimer = setTimeout(onScrollEnd, 140);
+        };
+
+        commitIndex(computeBestIdx());
+
+        root.addEventListener("scroll", onScroll, { passive: true });
+        root.addEventListener("scrollend", onScrollEnd);
+        window.addEventListener("resize", onScrollEnd);
+
+        const ro = new ResizeObserver(onScrollEnd);
+        ro.observe(root);
+
+        return () => {
+            root.removeEventListener("scroll", onScroll);
+            root.removeEventListener("scrollend", onScrollEnd);
+            window.removeEventListener("resize", onScrollEnd);
+            ro.disconnect();
+            clearTimeout(idleTimer);
+            if (rafId) cancelAnimationFrame(rafId);
+        };
     }, [projects.length]);
 
     const currentProject = projects[activeIndex] ?? null;
-    const previousProject = projects[activeIndex - 1] ?? null;
-    const nextProject = projects[activeIndex + 1] ?? null;
 
     const projectImage = currentProject?.name?.toLowerCase() === "save stride" ? savestride : null;
     const techLower = (currentProject?.tech_stack ?? "").toLowerCase();
@@ -85,14 +171,16 @@ function Works() {
             className="relative z-10 w-full h-full pt-24 overflow-y-auto no-scrollbar snap-y snap-mandatory"
         >
             <div className="fixed flex top-[11vh] flex-col items-center left-1/2 -translate-x-1/2 fade-in">
-                <h1 className="ND text-4xl opacity-70 -translate-x-1">Scroll</h1>
+                <h1 className="ND text-4xl opacity-70 -translate-x-1 hidden md:inline">Scroll</h1>
                 <PiMouseScroll size={30} className="opacity-70 animate-bounce" />
             </div>
-            <div className="fixed right-12 top-28 text-right fade-in">
+            <div className="fixed md:right-12 top-40 md:top-28 text-right fade-in p-3 md:p-0">
                 <div className="relative overflow-visible" style={{ height: TITLE_ROW_PX * 3 }}>
-                    <div
-                        className="flex flex-col transition-transform duration-500 ease-out will-change-transform"
-                        style={{ transform: `translateY(${-activeIndex * TITLE_ROW_PX}px)` }}
+                    <motion.div
+                        className="flex flex-col will-change-transform transform-gpu items-center md:items-end gap-0"
+                        initial={false}
+                        animate={{ y: -activeIndex * TITLE_ROW_PX }}
+                        transition={titleTransition}
                     >
                         {reelItems.map((p, reelIdx) => {
                             const idx = reelIdx - 1;
@@ -103,32 +191,39 @@ function Works() {
                             return (
                                 <div
                                     key={p?.id ?? `spacer-${reelIdx}`}
-                                    className="h-14 flex items-center justify-end overflow-visible"
+                                    className="h-14 flex items-center justify-end overflow-visible g"
                                 >
-                                    <button
+                                    <motion.button
                                         type="button"
+                                        initial={false}
+                                        animate={{
+                                            scale: isActive ? activeTitleScale : 1,
+                                            opacity: isSpacer ? 0 : isActive ? 1 : isNeighbor ? 0.8 : 0,
+                                        }}
+                                        whileHover={isNeighbor && !prefersReducedMotion ? { opacity: 1 } : undefined}
+                                        transition={titleTransition}
                                         onClick={() => !isSpacer && scrollToIndex(idx)}
                                         className={[
-                                            "SG inline-block whitespace-nowrap transition-all duration-500 ease-out",
+                                            "SG inline-block whitespace-nowrap transform-gpu origin-center md:origin-right",
                                             isActive
-                                                ? "font-extrabold text-white text-3xl scale-[2.35] origin-right"
+                                                ? "font-extrabold text-white text-xl md:text-3xl"
                                                 : isNeighbor
-                                                    ? "font-bold text-3xl opacity-80 hover:opacity-100 bg-linear-to-t from-white/0 to-white text-transparent bg-clip-text"
-                                                    : "font-bold text-3xl opacity-0 pointer-events-none",
+                                                    ? "font-bold text-2xl md:text-3xl bg-linear-to-t from-white/0 to-white text-transparent bg-clip-text"
+                                                    : "font-bold text-2xl md:text-3xl pointer-events-none",
                                         ].join(" ")}
                                     >
                                         {p?.name ?? ""}
-                                    </button>
+                                    </motion.button>
                                 </div>
                             );
                         })}
-                    </div>
+                    </motion.div>
                 </div>
 
                 {!!currentProject?.overview && (
                     <p
                         key={currentProject.id}
-                        className="SG text-white/70 text-xl mt-10 max-w-lg ml-auto fade-in"
+                        className="SG text-white/70 text-md md:text-xl mt-10 max-w-lg ml-auto fade-in text-left"
                         style={{ ["--delay"]: "0ms" }}
                     >
                         {currentProject.overview}
@@ -148,17 +243,21 @@ function Works() {
                 </section>
             ))}
 
-            <div className="fixed bottom-3 left-2 rounded-bl-3xl pt-3 pr-3 rounded-tr-3xl bg-black flex 
-             before:absolute before:content-[''] before:w-10 before:h-10
-          before:-top-10 before:left-0 before:rounded-bl-3xl
-          before:shadow-[-0.5rem_0.8rem_black]
+            <div className="fixed top-0 md:top-auto left-0 md:bottom-3 md:left-2 md:rounded-bl-3xl pl-2 md:pl-0 pb-3 md:pb-0 pt-3 pr-2 md:pr-3 rounded-tr-3xl bg-black flex
+            
+            before:absolute before:content-[''] before:w-10 before:h-10
+          before:-bottom-10 md:before:bottom-auto md:before:-top-10 before:right-2 md:right-auto md:before:left-0 before:rounded-tr-3xl md:before:rounded-bl-3xl
+          before:shadow-[0.5rem_-0.8rem_black]
+          md:before:shadow-[-0.5rem_0.8rem_black]
           
+      
           after:absolute after:content-[''] after:w-10 after:h-10
-          after:bottom-0 after:-right-10 after:rounded-bl-3xl
-          after:shadow-[-0.5rem_0.8rem_black]
+          after:-bottom-10 md:after:bottom-0 after:left-2 md:after:left-auto md:after:-right-10 after:rounded-tl-3xl md:after:rounded-bl-3xl
+          after:shadow-[-0.5rem_-0.8rem_black]
+          md:after:shadow-[-0.5rem_0.8rem_black]
       corner-bl
             ">
-                <div className="flex gap-20 items-center absolute -top-15 left-7">
+                <div className="flex gap-20 items-center absolute -top-15 md:left-7">
                     <a
                         className="cursor-pointer hover:underline font-semibold fade-in [--delay:200ms] inline-flex items-center gap-1"
                         href={currentProject?.links?.demo || "#"}
@@ -188,7 +287,7 @@ function Works() {
                     <img
                         src={projectImage}
                         alt={currentProject?.name ?? "Project preview"}
-                        className="w-[50vw] h-auto rounded-2xl rounded-tl-3xl rounded-br-3xl fade-in"
+                        className="md:w-[50vw] h-auto rounded-3xl rounded-tl-3xl rounded-br-3xl fade-in"
                     />
                 ) : (
                     <div className="w-[50vw] aspect-16/10 rounded-2xl rounded-tl-3xl rounded-br-3xl bg-white/5 border border-white/10" />
