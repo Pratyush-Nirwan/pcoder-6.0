@@ -135,12 +135,13 @@ function About() {
                 </ArcherContainer>
             </div>
 
-            <div className="fixed bottom-0 flex flex-col">
+
+            <div className="fixed bottom-1/2 translate-y-1/2 right-20 flex flex-col md:hidden w-[70vw]">
                 {timelineData.slice(0, 2).map((item, index) => (
                     <div key={index} className="flex flex-row-reverse gap-5">
 
                         {/* Right: dot + line */}
-                        <div className="flex flex-col items-center">
+                        <div className="flex flex-col items-center ">
                             <GoDotFill size={20} className="shrink-0" />
                             {index !== 1 && (
                                 <div className="w-px flex-1 bg-white my-1" />
@@ -149,8 +150,29 @@ function About() {
 
                         {/* Left: text */}
                         <div className="flex flex-col pb-6 text-right">
-                            <span>{item.year}</span>
-                            <span>{item.text}</span>
+                            <span className='ND text-xs'>{item.year}</span>
+                            <span className='SG text-sm'>{item.text}</span>
+                        </div>
+
+                    </div>
+                ))}
+            </div>
+            <div className="fixed bottom-20 left-10 flex flex-col md:hidden w-[85vw]">
+                {timelineData.slice(2, 4).map((item, index) => (
+                    <div key={index} className="flex flex-row gap-5">
+
+                        {/* Left: dot + line */}
+                        <div className="flex flex-col items-center">
+                            <GoDotFill size={20} className="shrink-0" />
+                            {index !== 1 && (
+                                <div className="w-px flex-1 bg-white my-1" />
+                            )}
+                        </div>
+
+                        {/* Right: text */}
+                        <div className="flex flex-col pb-6 text-left">
+                            <span className='ND text-xs'>{item.year}</span>
+                            <span className='SG text-sm'>{item.text}</span>
                         </div>
 
                     </div>

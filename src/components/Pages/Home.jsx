@@ -38,8 +38,14 @@ function Home() {
             <div className="fixed left-1/2 bottom-50 SG font-extrabold -translate-x-1/2 flex flex-col items-center gap-5 fade-in [--delay:1000ms] md:hidden">
                 <MdOutlineSwipeVertical size={40} className="animate-bounce opacity-50" />
             </div>
-            <div
-                className="absolute bottom-0 right-0 z-10 bg-black p-5 rounded-tl-3xl
+            <div className="absolute bottom-0 right-0 z-10">
+                <div className="relative">
+                    <div className="absolute bottom-full right-4 mb-3 flex flex-col items-end gap-0 pointer-events-none md:hidden">
+                        <p className="ND text-md text-nowrap -rotate-12 fade-in [--delay:200ms] -translate-x-3 translate-y-12">Lets Work Together</p>
+                        <Arrow className="h-20 w-20 -translate-x-20 translate-y-5 rotate-20 text-white/70 opacity-70 fade-in [--delay:300ms] [clip-path:inset(50%_0_0_0)]" />
+                    </div>
+
+                    <div className="bg-black p-5 rounded-tl-3xl
           before:absolute before:content-[''] before:w-10 before:h-10
           before:bottom-0 before:-left-10 before:rounded-br-3xl
           before:shadow-[0.5rem_0.8rem_black]
@@ -48,13 +54,15 @@ function Home() {
           after:-top-10 after:right-0 after:rounded-br-3xl
           after:shadow-[0.5rem_0.8rem_black] corner-br
         "
-            >
-                <h2 className="SG text-2xl text-white/60 transition-all hover:text-white cursor-pointer">Hire Me</h2>
+                    >
+                        <h2 className="SG text-2xl text-white/60 transition-all hover:text-white cursor-pointer">Hire Me</h2>
+                    </div>
+                </div>
             </div>
 
-            <div className="z-20 flex fixed bottom-5 right-27">
-                <p className="ND text-xl md:text-2xl absolute text-nowrap translate-x-10 translate-y-7 md:-translate-x-30 md:translate-y-10 -rotate-20 fade-in [--delay:200ms]">Lets Work Together</p>
-                <Arrow />
+            <div className="fixed bottom-5 right-27 z-20 hidden pointer-events-none md:flex">
+                <p className="ND absolute text-2xl text-nowrap -translate-x-30 translate-y-10 -rotate-20 fade-in [--delay:200ms]">Lets Work Together</p>
+                <Arrow className=" h-32 w-32 text-white/70 opacity-70" />
             </div>
         </>
     );

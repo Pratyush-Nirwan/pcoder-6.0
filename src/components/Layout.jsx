@@ -4,12 +4,23 @@ import NavBar from "./NavBar";
 import Spotlight from "./Spotlight";
 import Grainient from "./Grainient";
 import SpotifyRp from "./Spotify";
-import Dither from "./Dither"
-import Iridescence from './Iridescence';
-import Silk from './Silk';
-import { worksState } from "./worksState";
 
 const routeOrder = ["/", "/about", "/works", "/guestbook"];
+
+/** Matches Works.jsx / Tailwind `md` - on small screens Works has no inner scroll, so route swipe/wheel should apply. */
+function isMobileViewport() {
+    return typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
+}
+
+function isInteractiveTarget(node) {
+    let current = node;
+    if (current?.nodeType === Node.TEXT_NODE) current = current.parentElement;
+    return !!(
+        current &&
+        typeof current.closest === "function" &&
+        current.closest("a,button,input,textarea,select,[role='button']")
+    );
+}
 
 /** True when the wheel should scroll nested content instead of changing routes. */
 function wheelWouldScrollNestedScrollable(event) {
@@ -59,35 +70,62 @@ function findScrollableAncestorY(node) {
     return null;
 }
 
-function Layout() {
+function canExitWorksRoute(direction) {
+    const root = document.getElementById("works-scroll-container");
+    if (!root) return false;
+
+    const sections = root.querySelectorAll("[data-works-section]");
+    if (!sections.length) return false;
+
+    const tolerance = 24;
+
+    if (direction < 0) {
+        const firstSectionTop = sections[0].offsetTop;
+        return root.scrollTop <= firstSectionTop + tolerance;
+    }
+
+    if (direction > 0) {
+        const lastSectionTop = sections[sections.length - 1].offsetTop;
+        return root.scrollTop >= Math.max(lastSectionTop - tolerance, 0);
+    }
+
+    return false;
+}
+
+export default function Layout() {
     const location = useLocation();
     const navigate = useNavigate();
     const lastWheelNavAt = useRef(0);
     const lastTouchNavAt = useRef(0);
-    const touchStartRef = useRef({ x: 0, y: 0, t: 0 });
+    const touchStartRef = useRef({ x: 0, y: 0, t: 0, ignored: false });
     const touchScrollRef = useRef({ el: null, scrollTop: 0 });
     const isAboutPage = location.pathname === "/about";
     const isWorkPage = location.pathname === "/works";
 
     useEffect(() => {
+        const resetTouchGesture = (ignored = false) => {
+            touchStartRef.current = { x: 0, y: 0, t: 0, ignored };
+            touchScrollRef.current = { el: null, scrollTop: 0 };
+        };
+
+        resetTouchGesture();
+
         const onWheel = (event) => {
             const direction = Math.sign(event.deltaY);
             if (direction === 0) return;
 
-            if (wheelWouldScrollNestedScrollable(event)) return;
+            const isDesktopWorks = location.pathname === "/works" && !isMobileViewport();
+            if (isDesktopWorks) {
+                if (!canExitWorksRoute(direction)) return;
+            } else if (wheelWouldScrollNestedScrollable(event)) {
+                return;
+            }
 
             const now = Date.now();
             if (now - lastWheelNavAt.current < 700) return;
 
             const currentIndex = routeOrder.indexOf(location.pathname);
             if (currentIndex === -1) return;
-
-            if (location.pathname === "/works") {
-                const atFirst = worksState.activeIndex === 0;
-                const atLast = worksState.activeIndex === worksState.totalProjects - 1;
-
-                if ((direction > 0 && !atLast) || (direction < 0 && !atFirst)) return;
-            }
 
             const nextIndex = currentIndex + direction;
             if (nextIndex < 0 || nextIndex >= routeOrder.length) return;
@@ -98,15 +136,17 @@ function Layout() {
         };
 
         const onTouchStart = (event) => {
-            // Ignore gestures that start on interactive elements.
+            resetTouchGesture();
+
             const target = event.target;
-            if (target && typeof target.closest === "function") {
-                if (target.closest("a,button,input,textarea,select,[role='button']")) return;
+            if (isInteractiveTarget(target)) {
+                resetTouchGesture(true);
+                return;
             }
 
             if (!event.touches?.length) return;
             const t = event.touches[0];
-            touchStartRef.current = { x: t.clientX, y: t.clientY, t: Date.now() };
+            touchStartRef.current = { x: t.clientX, y: t.clientY, t: Date.now(), ignored: false };
 
             const scrollEl = findScrollableAncestorY(target);
             touchScrollRef.current = scrollEl
@@ -115,71 +155,97 @@ function Layout() {
         };
 
         const onTouchEnd = (event) => {
-            if (!event.changedTouches?.length) return;
+            try {
+                if (!event.changedTouches?.length) return;
 
+                const start = touchStartRef.current;
+                if (!start?.t || start.ignored) return;
+
+                if (isInteractiveTarget(event.target)) return;
+
+                const t = event.changedTouches[0];
+                const dx = t.clientX - start.x;
+                const dy = t.clientY - start.y;
+                const dt = Date.now() - start.t;
+
+                const absDx = Math.abs(dx);
+                const absDy = Math.abs(dy);
+
+                // Ignore horizontal swipes.
+                if (absDx > absDy * 1.2) return;
+
+                const velocityY = dt > 0 ? absDy / dt : absDy;
+                const isFastSwipe = velocityY > 0.5 && absDy > 20;
+                const isLongSwipe = absDy > 70;
+
+                if (!isFastSwipe && !isLongSwipe) return;
+
+                const direction = -Math.sign(dy);
+                if (direction === 0) return;
+
+                const isDesktopWorks = location.pathname === "/works" && !isMobileViewport();
+                if (isDesktopWorks) {
+                    if (!canExitWorksRoute(direction)) return;
+                } else {
+                    const { el: scrollEl, scrollTop: startScrollTop } = touchScrollRef.current;
+                    if (
+                        scrollEl &&
+                        Math.abs(scrollEl.scrollTop - startScrollTop) > 0.5
+                    ) {
+                        return;
+                    }
+                }
+
+                const now = Date.now();
+                if (now - lastTouchNavAt.current < 700) return;
+
+                const currentIndex = routeOrder.indexOf(location.pathname);
+                if (currentIndex === -1) return;
+
+                const nextIndex = currentIndex + direction;
+                if (nextIndex < 0 || nextIndex >= routeOrder.length) return;
+
+                lastTouchNavAt.current = now;
+                navigate(routeOrder[nextIndex]);
+            } finally {
+                resetTouchGesture();
+            }
+        };
+
+        const onTouchMove = (event) => {
             const start = touchStartRef.current;
-            if (!start?.t) return;
+            if (!start?.t || start.ignored) return;
 
-            const t = event.changedTouches[0];
+            const isMobileWorks = location.pathname === "/works" && isMobileViewport();
+            if (!isMobileWorks || !event.touches?.length) return;
+
+            const t = event.touches[0];
             const dx = t.clientX - start.x;
             const dy = t.clientY - start.y;
-            const dt = Date.now() - start.t;
-
             const absDx = Math.abs(dx);
             const absDy = Math.abs(dy);
 
-            // Ignore horizontal swipes
+            if (absDy < 10) return;
             if (absDx > absDy * 1.2) return;
 
-            // 🔥 Velocity (px per ms)
-            const velocityY = absDy / dt;
+            event.preventDefault();
+        };
 
-            // 🎯 Conditions
-            const isFastSwipe = velocityY > 0.5 && absDy > 20;
-            const isLongSwipe = absDy > 70;
-
-            if (!isFastSwipe && !isLongSwipe) return;
-
-            const { el: scrollEl, scrollTop: startScrollTop } = touchScrollRef.current;
-            if (
-                scrollEl &&
-                Math.abs(scrollEl.scrollTop - startScrollTop) > 0.5
-            ) {
-                return;
-            }
-
-            const direction = -Math.sign(dy); // FIXED direction
-
-            if (direction === 0) return;
-
-            const now = Date.now();
-            if (now - lastTouchNavAt.current < 700) return;
-
-            const currentIndex = routeOrder.indexOf(location.pathname);
-            if (currentIndex === -1) return;
-
-            // Works page guard
-            if (location.pathname === "/works") {
-                const atFirst = worksState.activeIndex === 0;
-                const atLast = worksState.activeIndex === worksState.totalProjects - 1;
-
-                if ((direction > 0 && !atLast) || (direction < 0 && !atFirst)) return;
-            }
-
-            const nextIndex = currentIndex + direction;
-            if (nextIndex < 0 || nextIndex >= routeOrder.length) return;
-
-            lastTouchNavAt.current = now;
-            navigate(routeOrder[nextIndex]);
+        const onTouchCancel = () => {
+            resetTouchGesture();
         };
 
         window.addEventListener("wheel", onWheel, { passive: false });
         window.addEventListener("touchstart", onTouchStart, { passive: true });
+        window.addEventListener("touchmove", onTouchMove, { passive: false });
         window.addEventListener("touchend", onTouchEnd, { passive: true });
+        window.addEventListener("touchcancel", onTouchCancel, { passive: true });
         return () => {
             window.removeEventListener("wheel", onWheel);
             window.removeEventListener("touchstart", onTouchStart);
+            window.removeEventListener("touchmove", onTouchMove);
             window.removeEventListener("touchend", onTouchEnd);
+            window.removeEventListener("touchcancel", onTouchCancel);
         };
     }, [location.pathname, navigate]);
 
@@ -239,5 +305,3 @@ function Layout() {
         </div>
     );
 }
-
-export default Layout;

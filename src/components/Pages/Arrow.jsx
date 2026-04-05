@@ -1,14 +1,18 @@
-function Arrow() {
+import { useId } from "react";
+
+function Arrow({ className = "" }) {
+    const arrowheadId = useId().replace(/:/g, "");
+
     return (
         <svg
             viewBox="0 0 800 800"
             xmlns="http://www.w3.org/2000/svg"
-            className="w-32 h-32 text-white/70 z-20 opacity-70 translate-x-5 translate-y-5 scale-50 md:translate-x-0 md:translate-y-0 md:scale-100"
+            className={className}
             fill="none"
         >
             <defs>
                 <marker
-                    id="arrowhead"
+                    id={arrowheadId}
                     markerWidth="7"
                     markerHeight="7"
                     refX="3.5"
@@ -36,7 +40,7 @@ function Arrow() {
                 strokeWidth="10"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                markerEnd="url(#arrowhead)"
+                markerEnd={`url(#${arrowheadId})`}
             />
         </svg>
     );

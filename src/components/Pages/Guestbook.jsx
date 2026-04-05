@@ -216,7 +216,7 @@ function Guestbook({ selectedPage }) {
             <>
                 <div className="text-white text-2xl font-extrabold">~/{usernameLower}</div>
                 <p className="text-white leading-snug text-xl ND">{userMessage}</p>
-                <div className="flexitems-center gap-3 mt-1">
+                <div className="flex items-center gap-3 mt-1">
                     <TiDelete
                         size={22}
                         className="text-white cursor-pointer hover:text-white/70 transition-colors"
