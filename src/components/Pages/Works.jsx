@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 
 import { MdArrowOutward } from "react-icons/md";
 import { FaReact } from "react-icons/fa";
@@ -11,8 +11,7 @@ import savestride from "../../assets/save-stride.png";
 import { worksState } from "../worksState";
 
 const titleMotionTransitionDesktop = { type: "tween", duration: 0.5, ease: [0.33, 1, 0.68, 1] };
-/** Shorter on small screens so tweens finish before the next snap / index change */
-const titleMotionTransitionMobile = { type: "tween", duration: 0.32, ease: [0.4, 0, 0.2, 1] };
+void motion;
 
 function Works() {
     const TITLE_ROW_PX = 56;
@@ -31,20 +30,19 @@ function Works() {
             })),
         []
     );
-    worksState.totalProjects = projects.length;
 
     const containerRef = useRef(null);
     const sectionRefs = useRef([]);
 
+    // --- DESKTOP STATE ---
     const [activeIndex, setActiveIndex] = useState(() => {
         const idx = projects.findIndex((p) => p.name.toLowerCase() === "save stride");
         return idx >= 0 ? idx : 0;
     });
-
     const activeIndexRef = useRef(activeIndex);
-    useEffect(() => {
-        activeIndexRef.current = activeIndex;
-    }, [activeIndex]);
+
+    // --- MOBILE STATE (TOTALLY INDEPENDENT) ---
+    const [mobileIndex, setMobileIndex] = useState(0);
 
     const [isMobile, setIsMobile] = useState(() =>
         typeof window !== "undefined" ? window.matchMedia("(max-width: 767px)").matches : false
@@ -67,24 +65,13 @@ function Works() {
         return () => mq.removeEventListener("change", sync);
     }, []);
 
-    const titleTransition = useMemo(() => {
-        if (prefersReducedMotion) return { type: "tween", duration: 0 };
-        return isMobile ? titleMotionTransitionMobile : titleMotionTransitionDesktop;
-    }, [isMobile, prefersReducedMotion]);
-
-    const activeTitleScale = isMobile ? 1.75 : 2.35;
-
-    const scrollToIndex = (idx) => {
-        const el = sectionRefs.current[idx];
-        if (!el) return;
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-    };
-
+    // --- ORIGINAL DESKTOP LOGIC (UNTOUCHED BUT CONDITIONAL) ---
     useEffect(() => {
+        if (isMobile) return; // Prevent desktop logic from running on mobile
+
         const root = containerRef.current;
         if (!root || !projects.length) return;
 
-        /** Content-space math only — avoids N× getBoundingClientRect per frame on mobile */
         const computeBestIdx = () => {
             const center = root.scrollTop + root.clientHeight * 0.5;
             let bestIdx = 0;
@@ -138,11 +125,9 @@ function Works() {
         };
 
         commitIndex(computeBestIdx());
-
         root.addEventListener("scroll", onScroll, { passive: true });
         root.addEventListener("scrollend", onScrollEnd);
         window.addEventListener("resize", onScrollEnd);
-
         const ro = new ResizeObserver(onScrollEnd);
         ro.observe(root);
 
@@ -154,10 +139,30 @@ function Works() {
             clearTimeout(idleTimer);
             if (rafId) cancelAnimationFrame(rafId);
         };
-    }, [projects.length]);
+    }, [projects.length, isMobile]);
 
-    const currentProject = projects[activeIndex] ?? null;
+    // --- MOBILE NAVIGATION LOGIC (INDEPENDENT) ---
+    const navigateMobile = (direction) => {
+        setMobileIndex((prev) => {
+            const next = direction === "next"
+                ? Math.min(prev + 1, projects.length - 1)
+                : Math.max(prev - 1, 0);
+            worksState.activeIndex = next;
+            return next;
+        });
+    };
 
+    const scrollToIndex = (idx) => {
+        if (isMobile) return; // Desktop only function
+        const root = containerRef.current;
+        const el = sectionRefs.current[idx];
+        if (!root || !el) return;
+        const top = el.offsetTop;
+        root.scrollTo({ top, behavior: prefersReducedMotion ? "auto" : "smooth" });
+    };
+
+    // Determine which project data to show based on view
+    const currentProject = isMobile ? projects[mobileIndex] : projects[activeIndex];
     const projectImage = currentProject?.name?.toLowerCase() === "save stride" ? savestride : null;
     const techLower = (currentProject?.tech_stack ?? "").toLowerCase();
     const showReact = techLower.includes("react");
@@ -168,49 +173,49 @@ function Works() {
         <div
             id="works-scroll-container"
             ref={containerRef}
-            className="relative z-10 w-full h-full pt-24 overflow-y-auto no-scrollbar snap-y snap-mandatory"
+            className="relative z-10 w-full h-full pt-24 overflow-y-hidden md:overflow-y-auto no-scrollbar md:snap-y md:snap-mandatory"
+            style={{ touchAction: isMobile ? "pan-x" : "auto" }}
         >
-            <div className="fixed flex top-[11vh] flex-col items-center left-1/2 -translate-x-1/2 fade-in">
-                <h1 className="ND text-4xl opacity-70 -translate-x-1 hidden md:inline">Scroll</h1>
+            {/* Desktop Links (Static) */}
+            <div className="hidden md:flex gap-5 items-center fixed bottom-10 text-sm left-5">
+                <a className="cursor-pointer hover:underline font-semibold inline-flex items-center gap-1" href={currentProject?.links?.demo || "#"}>
+                    LIVE <MdArrowOutward size={20} />
+                </a>
+                <a className="cursor-pointer hover:underline font-semibold inline-flex items-center gap-1" href={currentProject?.links?.github || "#"}>
+                    GITHUB <MdArrowOutward size={20} />
+                </a>
+                <span className="flex gap-3 items-center font-semibold">TECH
+                    <span className="flex gap-3">
+                        {showReact && <FaReact size={20} />}
+                        {showTailwind && <RiTailwindCssFill size={20} />}
+                    </span>
+                </span>
+            </div>
+
+            {/* Scroll Indicator (Desktop Only) */}
+            <div className="fixed  top-[11vh] flex-col items-center left-1/2 -translate-x-1/2 fade-in hidden md:flex">
+                <h1 className="ND text-4xl opacity-70 -translate-x-1">Scroll</h1>
                 <PiMouseScroll size={30} className="opacity-70 animate-bounce" />
             </div>
-            <div className="fixed md:right-12 top-40 md:top-28 text-right fade-in p-3 md:p-0">
-                <div className="relative overflow-visible" style={{ height: TITLE_ROW_PX * 3 }}>
+
+            <div className="fixed z-50 md:z-auto md:right-12 left-1/2 -translate-x-1/2  md:translate-x-0 top-40 md:top-28 text-right fade-in p-3 md:p-0 w-full md:w-auto">
+                {/* --- DESKTOP TITLE REEL --- */}
+                <div className="relative overflow-visible hidden md:block" style={{ height: TITLE_ROW_PX * 3 }}>
                     <motion.div
-                        className="flex flex-col will-change-transform transform-gpu items-center md:items-end gap-0"
-                        initial={false}
+                        className="flex flex-col items-end gap-0 transform-gpu"
                         animate={{ y: -activeIndex * TITLE_ROW_PX }}
-                        transition={titleTransition}
+                        transition={titleMotionTransitionDesktop}
                     >
                         {reelItems.map((p, reelIdx) => {
                             const idx = reelIdx - 1;
-                            const isSpacer = !p;
-                            const isActive = !isSpacer && idx === activeIndex;
-                            const isNeighbor = !isSpacer && Math.abs(idx - activeIndex) === 1;
-
+                            const isActive = p && idx === activeIndex;
+                            const isNeighbor = p && Math.abs(idx - activeIndex) === 1;
                             return (
-                                <div
-                                    key={p?.id ?? `spacer-${reelIdx}`}
-                                    className="h-14 flex items-center justify-end overflow-visible g"
-                                >
+                                <div key={p?.id ?? `spacer-${reelIdx}`} className="h-14 flex items-center justify-end overflow-visible">
                                     <motion.button
-                                        type="button"
-                                        initial={false}
-                                        animate={{
-                                            scale: isActive ? activeTitleScale : 1,
-                                            opacity: isSpacer ? 0 : isActive ? 1 : isNeighbor ? 0.8 : 0,
-                                        }}
-                                        whileHover={isNeighbor && !prefersReducedMotion ? { opacity: 1 } : undefined}
-                                        transition={titleTransition}
-                                        onClick={() => !isSpacer && scrollToIndex(idx)}
-                                        className={[
-                                            "SG inline-block whitespace-nowrap transform-gpu origin-center md:origin-right",
-                                            isActive
-                                                ? "font-extrabold text-white text-xl md:text-3xl"
-                                                : isNeighbor
-                                                    ? "font-bold text-2xl md:text-3xl bg-linear-to-t from-white/0 to-white text-transparent bg-clip-text"
-                                                    : "font-bold text-2xl md:text-3xl pointer-events-none",
-                                        ].join(" ")}
+                                        animate={{ scale: isActive ? 2.35 : 1, opacity: isActive ? 1 : isNeighbor ? 0.8 : 0 }}
+                                        onClick={() => p && scrollToIndex(idx)}
+                                        className={`SG inline-block transform-gpu origin-right font-bold text-2xl md:text-3xl ${isActive ? "text-white" : "text-transparent bg-clip-text bg-linear-to-t from-white/0 to-white"}`}
                                     >
                                         {p?.name ?? ""}
                                     </motion.button>
@@ -220,77 +225,64 @@ function Works() {
                     </motion.div>
                 </div>
 
+                {/* --- MOBILE TITLE SWITCHER (INDEPENDENT) --- */}
+                <div className="md:hidden SG mt-10 flex items-center justify-between px-4 bg-black/50 backdrop-blur-sm rounded-full py-2 border border-white/10">
+                    <button onClick={() => navigateMobile("prev")} className="text-white text-3xl px-3">←</button>
+                    <AnimatePresence mode="wait">
+                        <motion.h2
+                            key={mobileIndex}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            className="text-white text-xl font-bold text-center min-w-[150px]"
+                        >
+                            {projects[mobileIndex]?.name}
+                        </motion.h2>
+                    </AnimatePresence>
+                    <button onClick={() => navigateMobile("next")} className="text-white text-3xl px-3">→</button>
+                </div>
+
+                {/* Overview Text */}
                 {!!currentProject?.overview && (
-                    <p
-                        key={currentProject.id}
-                        className="SG text-white/70 text-md md:text-xl mt-10 max-w-lg ml-auto fade-in text-left"
-                        style={{ ["--delay"]: "0ms" }}
-                    >
+                    <p className="SG text-white/70 text-md md:text-xl mt-10 max-w-lg ml-auto fade-in text-left px-4 md:px-0">
                         {currentProject.overview}
                     </p>
                 )}
             </div>
 
-            {projects.map((p, idx) => (
+            {/* Desktop Scroll Sections */}
+            {!isMobile && projects.map((p, idx) => (
                 <section
                     key={p.id}
-                    ref={(el) => {
-                        sectionRefs.current[idx] = el;
-                    }}
-                    data-project-index={idx}
+                    ref={(el) => (sectionRefs.current[idx] = el)}
+                    data-works-section
                     className="relative min-h-[calc(100vh-6rem)] snap-start"
-                >
-                </section>
+                />
             ))}
 
-            <div className="fixed top-0 md:top-auto left-0 md:bottom-3 md:left-2 md:rounded-bl-3xl pl-2 md:pl-0 pb-3 md:pb-0 pt-3 pr-2 md:pr-3 rounded-tr-3xl bg-black flex
-            
-            before:absolute before:content-[''] before:w-10 before:h-10
-          before:-bottom-10 md:before:bottom-auto md:before:-top-10 before:right-2 md:right-auto md:before:left-0 before:rounded-tr-3xl md:before:rounded-bl-3xl
-          before:shadow-[0.5rem_-0.8rem_black]
-          md:before:shadow-[-0.5rem_0.8rem_black]
-          
-      
-          after:absolute after:content-[''] after:w-10 after:h-10
-          after:-bottom-10 md:after:bottom-0 after:left-2 md:after:left-auto md:after:-right-10 after:rounded-tl-3xl md:after:rounded-bl-3xl
-          after:shadow-[-0.5rem_-0.8rem_black]
-          md:after:shadow-[-0.5rem_0.8rem_black]
-      corner-bl
-            ">
-                <div className="flex gap-20 items-center absolute -top-15 md:left-7">
-                    <a
-                        className="cursor-pointer hover:underline font-semibold fade-in [--delay:200ms] inline-flex items-center gap-1"
-                        href={currentProject?.links?.demo || "#"}
-                        target={currentProject?.links?.demo ? "_blank" : undefined}
-                        rel={currentProject?.links?.demo ? "noreferrer" : undefined}
-                        aria-disabled={!currentProject?.links?.demo}
-                    >
-                        LIVE <MdArrowOutward size={20} />
-                    </a>
-                    <a
-                        className="cursor-pointer hover:underline font-semibold fade-in [--delay:400ms] inline-flex items-center gap-1"
-                        href={currentProject?.links?.github || "#"}
-                        target={currentProject?.links?.github ? "_blank" : undefined}
-                        rel={currentProject?.links?.github ? "noreferrer" : undefined}
-                        aria-disabled={!currentProject?.links?.github}
-                    >
-                        GITHUB <MdArrowOutward size={20} />
-                    </a>
-                    <span className="cursor-pointer hover:underline font-semibold fade-in [--delay:600ms]">TECH
-                        <span className="flex gap-3">
-                            {showReact && <FaReact size={20} />}
-                            {showTailwind && <RiTailwindCssFill size={20} />}
-                        </span>
-                    </span>
+            {/* Mobile Footer Links */}
+            <div className="md:hidden fixed bottom-10 left-0 w-full flex justify-around items-center px-4 z-50">
+                <a className="font-bold text-xs flex items-center gap-1" href={currentProject?.links?.demo}>LIVE <MdArrowOutward /></a>
+                <a className="font-bold text-xs flex items-center gap-1" href={currentProject?.links?.github}>GITHUB <MdArrowOutward /></a>
+                <div className="flex gap-2">
+                    {showReact && <FaReact size={18} />}
+                    {showTailwind && <RiTailwindCssFill size={18} />}
                 </div>
+            </div>
+
+            {/* Image Preview Box */}
+            <div className="fixed z-20 md:z-auto top-0 md:top-auto left-0 md:bottom-3 md:left-2 md:rounded-bl-3xl pl-2 pt-3 pr-2 bg-black flex corner-bl">
                 {projectImage ? (
-                    <img
+                    <motion.img
+                        key={currentProject.id}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
                         src={projectImage}
-                        alt={currentProject?.name ?? "Project preview"}
-                        className="md:w-[50vw] h-auto rounded-3xl rounded-tl-3xl rounded-br-3xl fade-in"
+                        alt="preview"
+                        className="w-full md:w-[50vw] h-auto rounded-3xl"
                     />
                 ) : (
-                    <div className="w-[50vw] aspect-16/10 rounded-2xl rounded-tl-3xl rounded-br-3xl bg-white/5 border border-white/10" />
+                    <div className="w-[90vw] md:w-[50vw] aspect-video rounded-3xl bg-white/5 border border-white/10" />
                 )}
             </div>
         </div>
