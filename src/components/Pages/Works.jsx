@@ -11,7 +11,7 @@ import projectsData from "../../assets/Projects.json";
 import { worksState } from "../worksState";
 
 // Dynamically import all project images
-const imageModules = import.meta.glob('../../assets/project-photos/*.webp', { eager: true });
+const imageModules = import.meta.glob('../../assets/project-photos/*.webp', { as: 'url', eager: true });
 
 const titleMotionTransitionDesktop = { type: "tween", duration: 0.5, ease: [0.33, 1, 0.68, 1] };
 void motion;
@@ -194,7 +194,7 @@ function Works() {
     // Determine which project data to show based on view
     const currentProject = isMobile ? projects[mobileIndex] : projects[activeIndex];
     const projectImage = currentProject?.image
-        ? imageModules[`../../assets/project-photos/${currentProject.image}`]?.default
+        ? imageModules[`../../assets/project-photos/${currentProject.image}`]
         : null;
     const reelItems = useMemo(() => [null, ...projects, null], [projects]);
 
@@ -344,6 +344,7 @@ function Works() {
                         animate={{ opacity: 1 }}
                         src={projectImage}
                         alt="preview"
+                        loading="lazy"
                         className="w-full md:w-[50vw] h-auto rounded-3xl z-20"
                     />
                 ) : (
