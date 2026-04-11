@@ -2,13 +2,16 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
 import { MdArrowOutward } from "react-icons/md";
-import { FaReact } from "react-icons/fa";
-import { RiTailwindCssFill } from "react-icons/ri";
+import { FaReact, FaHtml5, FaCss3Alt } from "react-icons/fa";
+import { SiJavascript, SiTailwindcss, SiVite } from "react-icons/si";
+import { AiOutlineApi } from "react-icons/ai";
 import { PiMouseScroll } from "react-icons/pi";
 
 import projectsData from "../../assets/Projects.json";
-import savestride from "../../assets/save-stride.png";
 import { worksState } from "../worksState";
+
+// Dynamically import all project images
+const imageModules = import.meta.glob('../../assets/project-photos/*.png', { eager: true });
 
 const titleMotionTransitionDesktop = { type: "tween", duration: 0.5, ease: [0.33, 1, 0.68, 1] };
 void motion;
@@ -22,7 +25,11 @@ function Works() {
                 id: idx,
                 name: p?.name ?? `Project ${idx + 1}`,
                 overview: p?.overview ?? "",
-                tech_stack: p?.tech_stack ?? "",
+                tech_stack: (p?.tech_stack ?? "")
+                    .split(",")
+                    .map((stack) => stack.trim())
+                    .filter(Boolean),
+                image: p?.image ?? "",
                 links: {
                     github: p?.links?.github ?? "",
                     demo: p?.links?.demo ?? "",
@@ -30,6 +37,29 @@ function Works() {
             })),
         []
     );
+
+    const techIconMap = {
+        react: FaReact,
+        javascript: SiJavascript,
+        js: SiJavascript,
+        html5: FaHtml5,
+        html: FaHtml5,
+        css3: FaCss3Alt,
+        css: FaCss3Alt,
+        "tailwind css": SiTailwindcss,
+        tailwind: SiTailwindcss,
+        vite: SiVite,
+        api: AiOutlineApi,
+        "weather api": AiOutlineApi,
+        "advice slip api": AiOutlineApi,
+    };
+
+    const getTechIcons = (stackArray, size = 18) =>
+        stackArray?.map((tech, idx) => {
+            const Icon = techIconMap[tech.toLowerCase()];
+            if (!Icon) return null;
+            return <Icon key={`${tech}-${idx}`} size={size} title={tech} className="text-white/80" />;
+        });
 
     const containerRef = useRef(null);
     const sectionRefs = useRef([]);
@@ -163,10 +193,9 @@ function Works() {
 
     // Determine which project data to show based on view
     const currentProject = isMobile ? projects[mobileIndex] : projects[activeIndex];
-    const projectImage = currentProject?.name?.toLowerCase() === "save stride" ? savestride : null;
-    const techLower = (currentProject?.tech_stack ?? "").toLowerCase();
-    const showReact = techLower.includes("react");
-    const showTailwind = techLower.includes("tailwind");
+    const projectImage = currentProject?.image
+        ? imageModules[`../../assets/project-photos/${currentProject.image}`]?.default
+        : null;
     const reelItems = useMemo(() => [null, ...projects, null], [projects]);
 
     return (
@@ -176,21 +205,8 @@ function Works() {
             className="relative z-10 w-full h-full pt-24 overflow-y-hidden md:overflow-y-auto no-scrollbar md:snap-y md:snap-mandatory"
             style={{ touchAction: isMobile ? "pan-x" : "auto" }}
         >
-            {/* Desktop Links (Static) */}
-            <div className="hidden md:flex gap-5 items-center fixed bottom-10 text-sm left-5">
-                <a className="cursor-pointer hover:underline font-semibold inline-flex items-center gap-1" href={currentProject?.links?.demo || "#"}>
-                    LIVE <MdArrowOutward size={20} />
-                </a>
-                <a className="cursor-pointer hover:underline font-semibold inline-flex items-center gap-1" href={currentProject?.links?.github || "#"}>
-                    GITHUB <MdArrowOutward size={20} />
-                </a>
-                <span className="flex gap-3 items-center font-semibold">TECH
-                    <span className="flex gap-3">
-                        {showReact && <FaReact size={20} />}
-                        {showTailwind && <RiTailwindCssFill size={20} />}
-                    </span>
-                </span>
-            </div>
+
+
 
             {/* Scroll Indicator (Desktop Only) */}
             <div className="fixed  top-[11vh] flex-col items-center left-1/2 -translate-x-1/2 fade-in hidden md:flex">
@@ -234,7 +250,7 @@ function Works() {
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -20 }}
-                            className="text-white text-xl font-bold text-center min-w-[150px]"
+                            className="text-white text-xl font-bold text-center min-w-"
                         >
                             {projects[mobileIndex]?.name}
                         </motion.h2>
@@ -262,16 +278,34 @@ function Works() {
 
             {/* Mobile Footer Links */}
             <div className="md:hidden fixed bottom-10 left-0 w-full flex justify-around items-center px-4 z-50">
-                <a className="font-bold text-xs flex items-center gap-1" href={currentProject?.links?.demo}>LIVE <MdArrowOutward /></a>
-                <a className="font-bold text-xs flex items-center gap-1" href={currentProject?.links?.github}>GITHUB <MdArrowOutward /></a>
+                <a className="font-bold text-xs flex items-center gap-1 fade-in [--delay:200ms]" href={currentProject?.links?.demo}>LIVE <MdArrowOutward /></a>
+                <a className="font-bold text-xs flex items-center gap-1 fade-in" href={currentProject?.links?.github}>GITHUB <MdArrowOutward /></a>
                 <div className="flex gap-2">
-                    {showReact && <FaReact size={18} />}
-                    {showTailwind && <RiTailwindCssFill size={18} />}
+                    {getTechIcons(currentProject?.tech_stack, 18)}
                 </div>
             </div>
 
             {/* Image Preview Box */}
-            <div className="fixed z-20 md:z-auto top-0 md:top-auto left-0 md:bottom-3 md:left-2 md:rounded-bl-3xl pl-2 pt-3 pr-2 bg-black flex corner-bl">
+            <div className="fixed z-20 md:z-auto top-0 md:top-auto left-0 md:bottom-3 md:left-2 md:rounded-tr-3xl md:rounded-bl-3xl pl-0 pt-3 pr-3 bg-black flex corner-bl
+            before:w-9 before:h-9 before:absolute before:content-['']
+          before:bg-transparent before:-top-9 before:left-0
+          before:rounded-bl-3xl
+          before:shadow-[-0.5rem_0.8rem_black]
+
+          after:w-9 after:h-9 after:absolute after:content-['']
+          after:bg-transparent after:bottom-0 after:-right-9
+          after:rounded-bl-3xl
+          after:shadow-[-0.5rem_0.8rem_black]
+            ">
+                <div className="hidden md:absolute -top-10 left-0 w-full md:flex justify-between items-center px-4 z-50">
+                    <div className="flex flex-row gap-10">
+                        <a className="font-bold text-lg flex items-center gap-1 fade-in [--delay:200ms]" href={currentProject?.links?.demo}>LIVE <MdArrowOutward /></a>
+                        <a className="font-bold text-lg flex items-center gap-1 fade-in [--delay:400ms]" href={currentProject?.links?.github}>GITHUB <MdArrowOutward /></a>
+                    </div>
+                    <div className="flex gap-2 text-lg fade-in [--delay:800ms]">
+                        {getTechIcons(currentProject?.tech_stack, 25)}
+                    </div>
+                </div>
                 {projectImage ? (
                     <motion.img
                         key={currentProject.id}
