@@ -5,6 +5,19 @@ import Spotlight from "./Spotlight";
 import Grainient from "./Grainient";
 import SpotifyRp from "./Spotify";
 
+const imageModules = import.meta.glob("../assets/project-photos/*.webp", {
+    as: "url",
+    eager: true,
+});
+
+function preloadProjectImages() {
+    if (typeof window === "undefined") return;
+    Object.values(imageModules).forEach((src) => {
+        const img = new Image();
+        img.src = src;
+    });
+}
+
 const routeOrder = ["/", "/about", "/works", "/guestbook"];
 
 /** Matches Works.jsx / Tailwind `md` - on small screens Works has no inner scroll, so route swipe/wheel should apply. */
@@ -99,6 +112,10 @@ export default function Layout() {
     const touchScrollRef = useRef({ el: null, scrollTop: 0 });
     const isAboutPage = location.pathname === "/about";
     const isWorkPage = location.pathname === "/works";
+
+    useEffect(() => {
+        preloadProjectImages();
+    }, []);
 
     useEffect(() => {
         const resetTouchGesture = (ignored = false) => {
