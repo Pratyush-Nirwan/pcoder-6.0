@@ -236,7 +236,7 @@ function Guestbook({ selectedPage }) {
     return (
         <>
             <Spotlight />
-            <div className="h-full min-h-0 flex flex-col p-4 md:p-10 md:pt-10">
+            <div className="h-full min-h-0 flex flex-col p-4 md:p-10 md:pt-20">
                 <div className="flex flex-col md:flex-row md:items-start gap-3 md:gap-5 flex-1 min-h-0">
                     {/* CTA / Auth Card — fixed; messages scroll beside / below */}
                     <div className="shrink-0 w-full md:max-w-sm bg-black/50 backdrop-blur rounded-2xl p-5 flex flex-col gap-3 transition-all duration-300 fade-in">

@@ -3,6 +3,7 @@
         "name": "Save Stride",
         "overview": "Save Stride is a simple one-page React web application that helps users track a money-saving goal visually. At the top of the page, a dynamic progress bar shows how much of the goal has been completed. Users can add or remove savings, and every action is recorded in a transaction list with timestamps. The app is intentionally minimal, fast, and distraction-free—focused purely on building a consistent saving habit.",
         "tech_stack": "React, JavaScript, HTML5, Tailwind CSS, Vite",
+        "image": "save-stride.png",
         "links": {
             "github": "https://github.com/Pratyush-Nirwan/save-stride",
             "demo": "https://save-stride.vercel.app/"
@@ -12,6 +13,7 @@
         "name": "Encrypt Decrypt",
         "overview": "The Encrypt Decrypt Web Application features an intuitive user interface reminiscent of an operating system, providing a seamless experience for encrypting and decrypting messages. Powered by AES encryption with a randomly generated key, it ensures secure handling of sensitive information.",
         "tech_stack": "React, JavaScript, HTML5",
+        "image": "encrypt-decrypt.png",
         "links": {
             "github": "https://github.com/Pratyush-Nirwan/EncryptDecrypt",
             "demo": "https://encrypt-decrypt-pcoder.vercel.app/"
@@ -21,6 +23,7 @@
         "name": "Weather Wise",
         "overview": "Welcome to Weather-Wise, a sleek and responsive web application built with React that provides real-time weather information for any city around the globe. With an easy-to-use interface and detailed weather forecasts, Weather-Wise helps you plan your day, no matter where you are. Whether it's sunny, rainy, or snowy, Weather-Wise ensures you're always prepared!",
         "tech_stack": "React, JavaScript, HTML5, CSS3, Weather API",
+        "image": "weather-wise.png",
         "links": {
             "github": "https://github.com/Pratyush-Nirwan/weather-wise",
             "demo": "https://weather-wise-pcoder.vercel.app/"
@@ -30,6 +33,7 @@
         "name": "Advice Ticket",
         "overview": "Welcome to AdviceTicket, the React-based web application that serves you a fresh piece of advice every time you reload the page! Whether you're looking for a daily dose of inspiration or just a fun way to pass the time, AdviceTicket has got you covered. Share the wisdom with friends and family effortlessly by copying the link or scanning the QR code. Let's spread positivity, one advice at a time!",
         "tech_stack": "React, JavaScript, HTML5, Advice Slip API",
+        "image": "advice-ticket.png",
         "links": {
             "github": "https://github.com/Pratyush-Nirwan/Advice-Ticket",
             "demo": "https://advice-ticket.vercel.app/"

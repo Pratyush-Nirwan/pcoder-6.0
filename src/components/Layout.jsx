@@ -74,19 +74,17 @@ function canExitWorksRoute(direction) {
     const root = document.getElementById("works-scroll-container");
     if (!root) return false;
 
-    const sections = root.querySelectorAll("[data-works-section]");
-    if (!sections.length) return false;
-
-    const tolerance = 24;
+    const { scrollTop, scrollHeight, clientHeight } = root;
+    const tolerance = 100; // Increased tolerance for easier navigation
 
     if (direction < 0) {
-        const firstSectionTop = sections[0].offsetTop;
-        return root.scrollTop <= firstSectionTop + tolerance;
+        // Allow exit up when near the top
+        return scrollTop <= tolerance;
     }
 
     if (direction > 0) {
-        const lastSectionTop = sections[sections.length - 1].offsetTop;
-        return root.scrollTop >= Math.max(lastSectionTop - tolerance, 0);
+        // Allow exit down when near the bottom
+        return scrollTop + clientHeight >= scrollHeight - tolerance;
     }
 
     return false;
