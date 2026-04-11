@@ -11,7 +11,7 @@ import projectsData from "../../assets/Projects.json";
 import { worksState } from "../worksState";
 
 // Dynamically import all project images
-const imageModules = import.meta.glob('../../assets/project-photos/*.png', { eager: true });
+const imageModules = import.meta.glob('../../assets/project-photos/*.webp', { eager: true });
 
 const titleMotionTransitionDesktop = { type: "tween", duration: 0.5, ease: [0.33, 1, 0.68, 1] };
 void motion;
@@ -242,7 +242,7 @@ function Works() {
                 </div>
 
                 {/* --- MOBILE TITLE SWITCHER (INDEPENDENT) --- */}
-                <div className="md:hidden SG mt-10 flex items-center justify-between px-4 bg-black/50 backdrop-blur-sm rounded-full py-2 border border-white/10">
+                <div className="md:hidden SG mt-20 flex items-center justify-between px-4 bg-black/50 backdrop-blur-sm rounded-full py-1 border border-white/10">
                     <button onClick={() => navigateMobile("prev")} className="text-white text-3xl px-3">←</button>
                     <AnimatePresence mode="wait">
                         <motion.h2
@@ -260,7 +260,7 @@ function Works() {
 
                 {/* Overview Text */}
                 {!!currentProject?.overview && (
-                    <p className="SG text-white/70 text-md md:text-xl mt-10 max-w-lg ml-auto fade-in text-left px-4 md:px-0">
+                    <p className="SG text-white/70 text-md md:text-xl mt-5 max-w-lg ml-auto fade-in text-left px-4 md:px-0">
                         {currentProject.overview}
                     </p>
                 )}
@@ -286,16 +286,47 @@ function Works() {
             </div>
 
             {/* Image Preview Box */}
-            <div className="fixed z-20 md:z-auto top-0 md:top-auto left-0 md:bottom-3 md:left-2 md:rounded-tr-3xl md:rounded-bl-3xl pl-0 pt-3 pr-3 bg-black flex corner-bl
-            before:w-9 before:h-9 before:absolute before:content-['']
-          before:bg-transparent before:-top-9 before:left-0
-          before:rounded-bl-3xl
-          before:shadow-[-0.5rem_0.8rem_black]
+            <div className="fixed z-20 md:z-auto top-0 md:top-auto left-1/2 w-[97vw] md:w-auto md:bottom-3 md:left-2 md:rounded-tr-3xl md:rounded-bl-3xl pl-0 pt-3 pb-3 md:pb-0 pr-0 md:pr-3 bg-black flex corner-bl -translate-x-1/2 md:translate-x-0
+            
+            before:w-9 
+            before:h-9 
+            before:absolute 
+            before:content-['']
+            before:bg-transparent
+            before:-bottom-9 
+            before:left-0.5
+            before:rounded-tl-3xl
+            before:shadow-[-0.5rem_-0.8rem_black]
 
-          after:w-9 after:h-9 after:absolute after:content-['']
-          after:bg-transparent after:bottom-0 after:-right-9
-          after:rounded-bl-3xl
-          after:shadow-[-0.5rem_0.8rem_black]
+            md:before:w-9 
+            md:before:h-9 
+            md:before:absolute 
+            md:before:content-['']
+            md:before:bg-transparent 
+            md:before:-top-9 
+            md:before:left-0
+            md:before:rounded-bl-3xl
+            md:before:shadow-[-0.5rem_0.8rem_black]
+
+            after:w-9 
+            after:h-9 
+            after:absolute 
+            after:content-['']
+            after:bg-transparent
+            after:-bottom-9 
+            after:right-0.5
+            after:rounded-tr-3xl
+            after:shadow-[0.5rem_-0.8rem_black]
+
+            md:after:w-9 
+            md:after:h-9 
+            md:after:absolute 
+            md:after:content-['']
+            md:after:bg-transparent 
+            md:after:bottom-0 
+            md:after:-right-9
+            md:after:rounded-bl-3xl
+            md:after:shadow-[-0.5rem_0.8rem_black]
             ">
                 <div className="hidden md:absolute -top-10 left-0 w-full md:flex justify-between items-center px-4 z-50">
                     <div className="flex flex-row gap-10">
@@ -313,7 +344,7 @@ function Works() {
                         animate={{ opacity: 1 }}
                         src={projectImage}
                         alt="preview"
-                        className="w-full md:w-[50vw] h-auto rounded-3xl"
+                        className="w-full md:w-[50vw] h-auto rounded-3xl z-20"
                     />
                 ) : (
                     <div className="w-[90vw] md:w-[50vw] aspect-video rounded-3xl bg-white/5 border border-white/10" />
