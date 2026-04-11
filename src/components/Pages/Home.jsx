@@ -55,7 +55,12 @@ function Home() {
           after:shadow-[0.5rem_0.8rem_black] corner-br
         "
                     >
-                        <h2 className="SG text-2xl text-white/60 transition-all hover:text-white cursor-pointer">Hire Me</h2>
+                        <h2
+                            role="button"
+                            tabIndex={0}
+                            onClick={() => (window.location.href = "mailto:pratyushnirwan123@gmail.com?subject=Hiring%20Inquiry&body=Hi%20Pratyush%2C%0A%0AI%20would%20like%20to%20discuss%20an%20oppurtunity.")}
+
+                            className="SG text-2xl text-white/60 transition-all hover:text-white cursor-pointer">Hire Me</h2>
                     </div>
                 </div>
             </div>
