@@ -286,7 +286,7 @@ function Works() {
             </div>
 
             {/* Image Preview Box */}
-            <div className="fixed z-20 md:z-auto top-0 md:top-auto left-1/2 w-[97vw] md:w-auto md:bottom-3 md:left-2 md:rounded-tr-3xl md:rounded-bl-3xl pl-0 pt-3 pb-3 md:pb-0 pr-0 md:pr-3 bg-black flex corner-bl -translate-x-1/2 md:translate-x-0
+            <div className="fixed z-20 md:z-auto top-0 md:top-auto left-1/2 w-[97vw] md:w-auto md:bottom-3 md:left-2 md:rounded-tr-3xl md:rounded-bl-3xl pl-0 pt-3 pb-3 md:pb-0 pr-0 md:pr-3 bg-black flex corner-bl -translate-x-1/2 md:translate-x-0 pointer-events-none
             
             before:w-9 
             before:h-9 
@@ -328,7 +328,7 @@ function Works() {
             md:after:rounded-bl-3xl
             md:after:shadow-[-0.5rem_0.8rem_black]
             ">
-                <div className="hidden md:absolute -top-10 left-0 w-full md:flex justify-between items-center px-4 z-50">
+                <div className="hidden md:absolute -top-10 left-0 w-full md:flex justify-between items-center px-4 z-50 pointer-events-auto">
                     <div className="flex flex-row gap-10">
                         <a className="font-bold text-lg flex items-center gap-1 fade-in [--delay:200ms] transition-colors duration-200 text-white/70 hover:text-white md:hover:text-white" href={currentProject?.links?.demo}>LIVE <MdArrowOutward /></a>
                         <a className="font-bold text-lg flex items-center gap-1 fade-in [--delay:400ms] transition-colors duration-200 text-white/70 hover:text-white md:hover:text-white" href={currentProject?.links?.github}>GITHUB <MdArrowOutward /></a>
@@ -345,10 +345,10 @@ function Works() {
                         src={projectImage}
                         alt="preview"
                         loading="lazy"
-                        className="w-full md:w-[50vw] h-auto rounded-3xl z-20"
+                        className="w-full md:w-[50vw] h-auto rounded-3xl z-20 pointer-events-none"
                     />
                 ) : (
-                    <div className="w-[90vw] md:w-[50vw] aspect-video rounded-3xl bg-white/5 border border-white/10" />
+                    <div className="w-[90vw] md:w-[50vw] aspect-video rounded-3xl bg-white/5 border border-white/10 pointer-events-none" />
                 )}
             </div>
         </div>
