@@ -283,9 +283,11 @@ function Works() {
             ))}
 
             {/* Mobile Footer Links */}
-            <div className="md:hidden fixed bottom-10 left-0 w-full flex justify-around items-center px-4 z-50">
-                <a className="font-bold text-xs flex items-center gap-1 fade-in [--delay:200ms]" href={currentProject?.links?.demo}>LIVE <MdArrowOutward /></a>
-                <a className="font-bold text-xs flex items-center gap-1 fade-in" href={currentProject?.links?.github}>GITHUB <MdArrowOutward /></a>
+            <div className="md:hidden fixed bottom-10 left-1/2 -translate-x-1/2 w-[97vw] flex justify-between items-center px-4 z-50">
+                <div className="flex gap-10">
+                    <a className="font-bold text-xs flex items-center gap-1 fade-in [--delay:200ms]" href={currentProject?.links?.demo}>LIVE <MdArrowOutward /></a>
+                    <a className="font-bold text-xs flex items-center gap-1 fade-in" href={currentProject?.links?.github}>GITHUB <MdArrowOutward /></a>
+                </div>
                 <div className="flex gap-2">
                     {getTechIcons(currentProject?.tech_stack, 18)}
                 </div>
