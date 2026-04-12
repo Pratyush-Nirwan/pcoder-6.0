@@ -9,6 +9,7 @@ import { PiMouseScroll } from "react-icons/pi";
 
 import projectsData from "../../assets/Projects.json";
 import { worksState } from "../worksState";
+import Spotlight from "../Spotlight";
 
 // Dynamically import all project images
 const imageModules = import.meta.glob('../../assets/project-photos/*.webp', { as: 'url', eager: true });
@@ -205,101 +206,133 @@ function Works() {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
     return (
-        <div
-            id="works-scroll-container"
-            ref={containerRef}
-            className="relative z-10 w-full h-full pt-24 overflow-y-hidden md:overflow-y-auto no-scrollbar md:snap-y md:snap-mandatory"
-            style={{ touchAction: isMobile ? "pan-x" : "auto" }}
-        >
+        <>
+            <Spotlight />
+            <div
+                id="works-scroll-container"
+                ref={containerRef}
+                className="relative z-10 w-full h-full pt-24 overflow-y-hidden md:overflow-y-auto no-scrollbar md:snap-y md:snap-mandatory"
+                style={{ touchAction: isMobile ? "pan-x" : "auto" }}
+            >
 
 
 
-            {/* Scroll Indicator (Desktop Only) */}
-            <div className="fixed  top-[11vh] flex-col items-center left-1/2 -translate-x-1/2 fade-in hidden md:flex">
-                <h1 className="ND text-4xl opacity-70 -translate-x-1">Scroll</h1>
-                <PiMouseScroll size={30} className="opacity-70 animate-bounce" />
-            </div>
-
-            <div className="fixed z-50 md:z-auto md:right-12 left-1/2 -translate-x-1/2  md:translate-x-0 top-40 md:top-28 text-right fade-in p-3 md:p-0 w-full md:w-auto">
-                {/* --- DESKTOP TITLE REEL --- */}
-                <div className="relative overflow-visible hidden md:block" style={{ height: TITLE_ROW_PX * 3 }}>
-                    <motion.div
-                        className="flex flex-col items-end gap-0 transform-gpu"
-                        animate={{ y: -activeIndex * TITLE_ROW_PX }}
-                        transition={titleMotionTransitionDesktop}
-                    >
-                        {reelItems.map((p, reelIdx) => {
-                            const idx = reelIdx - 1;
-                            const isActive = p && idx === activeIndex;
-                            const isNeighbor = p && Math.abs(idx - activeIndex) === 1;
-                            return (
-                                <div key={p?.id ?? `spacer-${reelIdx}`} className="h-14 flex items-center justify-end overflow-visible">
-                                    <motion.button
-                                        animate={{ scale: isActive ? 2.35 : 1, opacity: isActive ? 1 : isNeighbor ? 0.8 : 0 }}
-                                        onClick={() => p && scrollToIndex(idx)}
-                                        className={`SG inline-block transform-gpu origin-right font-bold text-2xl md:text-3xl ${isActive ? "text-white" : "text-transparent bg-clip-text bg-linear-to-t from-white/0 to-white"}`}
-                                    >
-                                        {p?.name ?? ""}
-                                    </motion.button>
-                                </div>
-                            );
-                        })}
-                    </motion.div>
+                {/* Scroll Indicator (Desktop Only) */}
+                <div className="fixed  top-[11vh] flex-col items-center left-1/2 -translate-x-1/2 fade-in hidden md:flex">
+                    <h1 className="ND text-4xl opacity-70 -translate-x-1">Scroll</h1>
+                    <PiMouseScroll size={30} className="opacity-70 animate-bounce" />
                 </div>
 
-                {/* --- MOBILE TITLE SWITCHER (INDEPENDENT) --- */}
-                <div className="md:hidden SG mt-20 flex items-center justify-between px-4 bg-black/50 backdrop-blur-sm rounded-full py-1 border border-white/10">
-                    <button onClick={() => navigateMobile("prev")} className="text-white text-3xl px-3">←</button>
-                    <AnimatePresence mode="wait">
-                        <motion.h2
-                            key={mobileIndex}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            className="text-white text-xl font-bold text-center min-w-"
+
+                <div className="fixed z-50 md:z-auto md:right-12 left-1/2 -translate-x-1/2  md:translate-x-0 top-40 md:top-28 text-right fade-in p-3 md:p-0 w-full md:w-auto -mt-10">
+                    {/* --- DESKTOP TITLE REEL --- */}
+
+                    <Spotlight.Target mode="inline" className="w-fit ml-auto">
+                        <pre className="ND hidden md:block text-right">
+                            <code className="font-inherit">{`<h1>`}</code>
+                        </pre>
+                    </Spotlight.Target>
+                    <div className="relative overflow-visible hidden md:block" style={{ height: TITLE_ROW_PX * 3 }}>
+
+                        <motion.div
+                            className="flex flex-col items-end gap-0 transform-gpu"
+                            animate={{ y: -activeIndex * TITLE_ROW_PX }}
+                            transition={titleMotionTransitionDesktop}
                         >
-                            {projects[mobileIndex]?.name}
-                        </motion.h2>
-                    </AnimatePresence>
-                    <button onClick={() => navigateMobile("next")} className="text-white text-3xl px-3">→</button>
+                            {reelItems.map((p, reelIdx) => {
+                                const idx = reelIdx - 1;
+                                const isActive = p && idx === activeIndex;
+                                const isNeighbor = p && Math.abs(idx - activeIndex) === 1;
+                                return (
+                                    <div key={p?.id ?? `spacer-${reelIdx}`} className="h-14 flex items-center justify-end overflow-visible">
+                                        <motion.button
+                                            animate={{ scale: isActive ? 2.35 : 1, opacity: isActive ? 1 : isNeighbor ? 0.8 : 0 }}
+                                            onClick={() => p && scrollToIndex(idx)}
+                                            className={`SG inline-block transform-gpu origin-right font-bold text-2xl md:text-3xl ${isActive ? "text-white" : "text-transparent bg-clip-text bg-linear-to-t from-white/0 to-white"}`}
+                                        >
+
+                                            {p?.name ?? ""}
+                                        </motion.button>
+
+                                    </div>
+
+                                );
+                            })}
+                        </motion.div>
+
+
+                    </div>
+                    <Spotlight.Target mode="inline" className="w-fit ml-auto">
+                        <pre className="ND hidden md:block text-right">
+                            <code className="font-inherit">{`</h1>`}</code>
+                        </pre>
+                    </Spotlight.Target>
+
+                    {/* --- MOBILE TITLE SWITCHER (INDEPENDENT) --- */}
+                    <div className="md:hidden SG mt-20 flex items-center justify-between px-4 bg-black/50 backdrop-blur-sm rounded-full py-1 border border-white/10">
+                        <button onClick={() => navigateMobile("prev")} className="text-white text-3xl px-3">←</button>
+                        <AnimatePresence mode="wait">
+                            <motion.h2
+                                key={mobileIndex}
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                className="text-white text-xl font-bold text-center min-w-"
+                            >
+                                {projects[mobileIndex]?.name}
+                            </motion.h2>
+                        </AnimatePresence>
+                        <button onClick={() => navigateMobile("next")} className="text-white text-3xl px-3">→</button>
+                    </div>
+
+                    {/* Overview Text */}
+                    {!!currentProject?.overview && (
+                        <>
+                            <Spotlight.Target mode="inline" className="w-fit ml-auto">
+                                <pre className="ND hidden md:block text-right">
+                                    <code className="font-inherit">{`<p>`}</code>
+                                </pre>
+                            </Spotlight.Target>
+                            <p className="SG text-white/70 text-md md:text-xl mt-5 max-w-lg ml-auto fade-in text-left px-4 md:px-0">
+                                {currentProject.overview}
+                            </p>
+                            <Spotlight.Target mode="inline" className="w-fit ml-auto">
+                                <pre className="ND hidden md:block text-right">
+                                    <code className="font-inherit">{`</p>`}</code>
+                                </pre>
+                            </Spotlight.Target>
+                        </>
+                    )}
                 </div>
 
-                {/* Overview Text */}
-                {!!currentProject?.overview && (
-                    <p className="SG text-white/70 text-md md:text-xl mt-5 max-w-lg ml-auto fade-in text-left px-4 md:px-0">
-                        {currentProject.overview}
-                    </p>
-                )}
-            </div>
+                {/* Desktop Scroll Sections */}
+                {!isMobile && projects.map((p, idx) => (
+                    <section
+                        key={p.id}
+                        ref={(el) => (sectionRefs.current[idx] = el)}
+                        data-works-section
+                        className="relative min-h-[calc(100vh-6rem)] snap-start"
+                    />
+                ))}
 
-            {/* Desktop Scroll Sections */}
-            {!isMobile && projects.map((p, idx) => (
-                <section
-                    key={p.id}
-                    ref={(el) => (sectionRefs.current[idx] = el)}
-                    data-works-section
-                    className="relative min-h-[calc(100vh-6rem)] snap-start"
-                />
-            ))}
-
-            {/* Mobile Footer Links */}
-            <div className="md:hidden fixed bottom-10 left-1/2 -translate-x-1/2 w-[97vw] flex justify-between items-center px-4 z-50">
-                <div className="flex gap-10">
-                    <a className="font-bold text-xs flex items-center gap-1 fade-in [--delay:200ms]" href={currentProject?.links?.demo}>LIVE <MdArrowOutward /></a>
-                    <a className="font-bold text-xs flex items-center gap-1 fade-in" href={currentProject?.links?.github}>GITHUB <MdArrowOutward /></a>
+                {/* Mobile Footer Links */}
+                <div className="md:hidden fixed bottom-10 left-1/2 -translate-x-1/2 w-[97vw] flex justify-between items-center px-4 z-50">
+                    <div className="flex gap-10">
+                        <a className="font-bold text-xs flex items-center gap-1 fade-in [--delay:200ms]" href={currentProject?.links?.demo}>LIVE <MdArrowOutward /></a>
+                        <a className="font-bold text-xs flex items-center gap-1 fade-in" href={currentProject?.links?.github}>GITHUB <MdArrowOutward /></a>
+                    </div>
+                    <div className="flex gap-2">
+                        {getTechIcons(currentProject?.tech_stack, 18)}
+                    </div>
                 </div>
-                <div className="flex gap-2">
-                    {getTechIcons(currentProject?.tech_stack, 18)}
-                </div>
-            </div>
 
-            {/* Image Preview Box */}
-            <div className={`fixed z-20 md:z-auto top-0 md:top-auto left-1/2 w-[97vw] md:w-auto md:bottom-3 md:left-2 md:rounded-tr-3xl md:rounded-bl-3xl pl-0 pt-3 pb-3 md:pb-0 pr-0 md:pr-3 bg-black flex corner-bl -translate-x-1/2 md:translate-x-0 pointer-events-none
+                {/* Image Preview Box */}
+                <div className={`fixed z-20 md:z-auto top-0 md:top-auto left-1/2 w-[97vw] md:w-auto md:bottom-3 md:left-2 md:rounded-tr-3xl md:rounded-bl-3xl pl-0 pt-3 pb-3 md:pb-0 pr-0 md:pr-3 bg-black flex corner-bl -translate-x-1/2 md:translate-x-0 pointer-events-none
               ${isDesktop ? "corner-bl" : "slide-down"}
-            before:w-9 
-            before:h-9 
-            before:absolute 
-            before:content-['']
+              before:w-9 
+              before:h-9 
+              before:absolute 
+              before:content-['']
             before:bg-transparent
             before:-bottom-9 
             before:left-0.5
@@ -315,7 +348,7 @@ function Works() {
             md:before:left-0
             md:before:rounded-bl-3xl
             md:before:shadow-[-0.5rem_0.8rem_black]
-
+            
             after:w-9 
             after:h-9 
             after:absolute 
@@ -325,7 +358,7 @@ function Works() {
             after:right-0.5
             after:rounded-tr-3xl
             after:shadow-[0.5rem_-0.8rem_black]
-
+            
             md:after:w-9 
             md:after:h-9 
             md:after:absolute 
@@ -336,30 +369,31 @@ function Works() {
             md:after:rounded-bl-3xl
             md:after:shadow-[-0.5rem_0.8rem_black]
             `}>
-                <div className="hidden md:absolute -top-10 left-0 w-full md:flex justify-between items-center px-4 z-50 pointer-events-auto">
-                    <div className="flex flex-row gap-10">
-                        <a className="font-bold text-lg flex items-center gap-1 fade-in [--delay:200ms] transition-colors duration-200 text-white/70 hover:text-white md:hover:text-white" href={currentProject?.links?.demo}>LIVE <MdArrowOutward /></a>
-                        <a className="font-bold text-lg flex items-center gap-1 fade-in [--delay:400ms] transition-colors duration-200 text-white/70 hover:text-white md:hover:text-white" href={currentProject?.links?.github}>GITHUB <MdArrowOutward /></a>
+                    <div className="hidden md:absolute -top-10 left-0 w-full md:flex justify-between items-center px-4 z-50 pointer-events-auto">
+                        <div className="flex flex-row gap-10">
+                            <a className="font-bold text-lg flex items-center gap-1 fade-in [--delay:200ms] transition-colors duration-200 text-white/70 hover:text-white md:hover:text-white" href={currentProject?.links?.demo}>LIVE <MdArrowOutward /></a>
+                            <a className="font-bold text-lg flex items-center gap-1 fade-in [--delay:400ms] transition-colors duration-200 text-white/70 hover:text-white md:hover:text-white" href={currentProject?.links?.github}>GITHUB <MdArrowOutward /></a>
+                        </div>
+                        <div className="flex gap-2 text-lg fade-in [--delay:800ms] pointer-events-none">
+                            {getTechIcons(currentProject?.tech_stack, 25)}
+                        </div>
                     </div>
-                    <div className="flex gap-2 text-lg fade-in [--delay:800ms] pointer-events-none">
-                        {getTechIcons(currentProject?.tech_stack, 25)}
-                    </div>
+                    {projectImage ? (
+                        <motion.img
+                            key={currentProject.id}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            src={projectImage}
+                            alt="preview"
+                            loading="lazy"
+                            className="w-full md:w-[50vw] h-auto rounded-3xl z-20 pointer-events-none"
+                        />
+                    ) : (
+                        <div className="w-[90vw] md:w-[50vw] aspect-video rounded-3xl bg-white/5 border border-white/10 pointer-events-none" />
+                    )}
                 </div>
-                {projectImage ? (
-                    <motion.img
-                        key={currentProject.id}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        src={projectImage}
-                        alt="preview"
-                        loading="lazy"
-                        className="w-full md:w-[50vw] h-auto rounded-3xl z-20 pointer-events-none"
-                    />
-                ) : (
-                    <div className="w-[90vw] md:w-[50vw] aspect-video rounded-3xl bg-white/5 border border-white/10 pointer-events-none" />
-                )}
             </div>
-        </div>
+        </>
     );
 }
 
