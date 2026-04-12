@@ -112,6 +112,7 @@ export default function Layout() {
     const touchScrollRef = useRef({ el: null, scrollTop: 0 });
     const isAboutPage = location.pathname === "/about";
     const isWorkPage = location.pathname === "/works";
+    const isGuestbookPage = location.pathname === "/guestbook";
 
     useEffect(() => {
         preloadProjectImages();
@@ -277,9 +278,11 @@ export default function Layout() {
                     className={
                         isWorkPage
                             ? "hidden"
-                            : isAboutPage
-                                ? "fixed bottom-0 left-0 z-20 fade-in [--delay:1s] bg-black p-5 md:p-6.5 flex items-center justify-center rounded-tr-3xl\n             before:absolute \n             before:content-[''] \n             before:w-10 \n             before:h-10\n          before:-top-10\n          before:left-2 \n          before:rounded-bl-3xl\n          before:shadow-[-0.5rem_0.8rem_black] corner-bl\n          \n           after:absolute \n             after:content-[''] \n             after:w-10 \n            \n             after:h-10\n          after:bottom-2\n          after:-right-10 \n          after:rounded-bl-3xl\n          after:shadow-[-0.5rem_0.8rem_black] corafter\n            "
-                                : "fixed bottom-7 left-8 z-20 fade-in [--delay:1s]"
+                            : isGuestbookPage && isMobileViewport()
+                                ? "hidden"
+                                : isAboutPage
+                                    ? "fixed bottom-0 left-0 z-20 fade-in [--delay:1s] bg-black p-5 md:p-6.5 flex items-center justify-center rounded-tr-3xl\n             before:absolute \n             before:content-[''] \n             before:w-10 \n             before:h-10\n          before:-top-10\n          before:left-2 \n          before:rounded-bl-3xl\n          before:shadow-[-0.5rem_0.8rem_black] corner-bl\n          \n           after:absolute \n             after:content-[''] \n             after:w-10 \n            \n             after:h-10\n          after:bottom-2\n          after:-right-10 \n          after:rounded-bl-3xl\n          after:shadow-[-0.5rem_0.8rem_black] corafter\n            "
+                                    : "fixed bottom-7 left-8 z-20 fade-in [--delay:1s]"
 
                     }
                 >
