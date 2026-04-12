@@ -48,18 +48,27 @@ const techLogos = [
 ];
 
 const timelineData = [
-    { year: "Now", text: "Building production-grade projects & open to collaborations" },
-    { year: "2025", text: "Focused on UX, performance, animations, real-world polish" },
-    { year: "2024", text: "Built Websites with React.js" },
-    { year: "2022", text: "Started with HTML, CSS, JavaScript" },
+    {
+        year: "Now",
+        text: "Building full-stack production apps with real-world features",
+        tech: ["Actively seeking Frontend / Full-Stack opportunities"],
+    },
+    {
+        year: "2025",
+        text: "Expanded into backend & databases",
+        tech: ["Supabase", "MongoDB", "Authentication", "CRUD systems"],
+    },
+    {
+        year: "2024",
+        text: "Developed scalable React applications with API integration",
+        tech: ["React", "Tailwind", "REST APIs"],
+    },
+    {
+        year: "2022",
+        text: "Built foundational web projects",
+        tech: ["HTML", "CSS", "JavaScript"],
+    },
 ];
-const compressedTimelineData = [
-    { year: "Now", text: "Building" },
-    { year: "2025", text: "Polish UX" },
-    { year: "2024", text: "React Dev" },
-    { year: "2022", text: "Started Web" },
-];
-
 function About() {
     const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
 
@@ -84,7 +93,7 @@ function About() {
                     {timelineData.map((item, index) => (
                         <div
                             key={index}
-                            className="mb-20"
+                            className="mb-10"
                             style={{
                                 transform: `translateX(-${index * 10}em)`
                             }}
@@ -117,7 +126,7 @@ function About() {
                                 </ArcherElement>
 
                                 {/* TEXT */}
-                                <span className="ml-2 translate-y-3">
+                                <span className="ml-2 -translate-y-4">
                                     <span
                                         className="block text-2xl text-white/60 ND fade-in"
                                         style={{
@@ -133,6 +142,23 @@ function About() {
                                         }}
                                     >
                                         {item.text}
+                                        {item.tech && (
+                                            <div
+                                                className="flex flex-wrap gap-2 mt-2 fade-in"
+                                                style={{
+                                                    animationDelay: `${(timelineData.length - 1 - index) * 400}ms`
+                                                }}
+                                            >
+                                                {item.tech.map((tech, i) => (
+                                                    <span
+                                                        key={i}
+                                                        className="text-xs px-2 py-1 rounded-full bg-white/10 text-white/80 backdrop-blur-sm"
+                                                    >
+                                                        {tech}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
                                     </span>
                                 </span>
 
@@ -159,6 +185,18 @@ function About() {
                         <div className="flex flex-col pb-6 text-right">
                             <span className='ND text-xs'>{item.year}</span>
                             <span className='SG text-sm'>{item.text}</span>
+                            {item.tech && (
+                                <div className="flex flex-wrap  gap-1 mt-2">
+                                    {item.tech.map((tech, i) => (
+                                        <span
+                                            key={i}
+                                            className="text-[10px] px-2 py-0 rounded-full bg-white/10 text-white/80"
+                                        >
+                                            {tech}
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                     </div>
@@ -177,9 +215,21 @@ function About() {
                         </div>
 
                         {/* Right: text */}
-                        <div className="flex flex-col pb-6 text-left">
+                        <div className="flex flex-col pb-4 text-left">
                             <span className='ND text-xs'>{item.year}</span>
                             <span className='SG text-sm'>{item.text}</span>
+                            {item.tech && (
+                                <div className="flex flex-wrap  gap-1 mt-2">
+                                    {item.tech.map((tech, i) => (
+                                        <span
+                                            key={i}
+                                            className="text-[10px] px-2 py-0 rounded-full bg-white/10 text-white/80"
+                                        >
+                                            {tech}
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                     </div>
