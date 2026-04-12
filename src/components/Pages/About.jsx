@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import LogoLoop from '../LogoLoop';
 import Spotlight from '../Spotlight';
 import {
@@ -61,6 +61,13 @@ const compressedTimelineData = [
 ];
 
 function About() {
+    const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 768);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
     return (
         <div className="relative z-10 flex flex-col w-full h-full pt-10 md:pt-24 gap-6 px-10 overflow-auto no-scrollbar text-justify">
             <Spotlight />
@@ -136,7 +143,7 @@ function About() {
             </div>
 
 
-            <div className="fixed bottom-1/2 translate-y-1/2 right-20 flex flex-col md:hidden w-[70vw]">
+            <div className="fixed bottom-1/2 translate-y-1/2 right-20 flex flex-col md:hidden w-[70vw] fade-in [--delay:400ms]">
                 {timelineData.slice(0, 2).map((item, index) => (
                     <div key={index} className="flex flex-row-reverse gap-5">
 
@@ -157,7 +164,7 @@ function About() {
                     </div>
                 ))}
             </div>
-            <div className="fixed bottom-20 left-10 flex flex-col md:hidden w-[85vw]">
+            <div className="fixed bottom-20 left-10 flex flex-col md:hidden w-[85vw] fade-in [--delay:800ms]">
                 {timelineData.slice(2, 4).map((item, index) => (
                     <div key={index} className="flex flex-row gap-5">
 
@@ -255,8 +262,9 @@ function About() {
             </div>
 
             {/* CONTACT CARD */}
-            <div className="
-            absolute bottom-1/2 translate-y-1/2 md:translate-y-0 md:bottom-0 right-0 z-10 bg-black p-5 rounded-tl-3xl rounded-bl-3xl md:rounded-bl-none corner-br
+            <div className={`
+            absolute bottom-1/2 translate-y-1/2 md:translate-y-0 md:bottom-0 right-0 z-10 bg-black p-5 rounded-tl-3xl rounded-bl-3xl md:rounded-bl-none 
+              ${isDesktop ? "corner-br" : "slide-left"}
               before:absolute 
               before:content-[''] 
               before:w-10 
@@ -279,7 +287,7 @@ function About() {
               after:right-0
               after:rounded-br-3xl
             after:shadow-[0.5rem_0.8rem_black]
-">
+            `}>
                 <div className="flex flex-col md:hidden items-center gap-6 text-2xl text-white">
                     <a href="mailto:pratyushnirwan@gmail.com"><MdEmail /></a>
                     <a href="https://www.linkedin.com/in/pratyush-nirwan/" target="_blank"><FaLinkedin /></a>
