@@ -71,12 +71,26 @@ const timelineData = [
 ];
 function About() {
     const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
+    const [currentTimelineIndex, setCurrentTimelineIndex] = useState(0);
+    const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
         const handleResize = () => setIsDesktop(window.innerWidth >= 768);
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setIsVisible(false);
+            setTimeout(() => {
+                setCurrentTimelineIndex((prevIndex) => (prevIndex + 1) % timelineData.length);
+                setIsVisible(true);
+            }, 500);
+        }, 4000); // Change every 4 seconds
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <div className="relative z-10 flex flex-col w-full h-full pt-10 md:pt-24 gap-6 px-10 overflow-auto no-scrollbar text-justify">
             <Spotlight />
@@ -169,71 +183,24 @@ function About() {
             </div>
 
 
-            <div className="fixed bottom-1/2 translate-y-1/2 right-20 flex flex-col md:hidden w-[70vw] fade-in [--delay:400ms]">
-                {timelineData.slice(0, 2).map((item, index) => (
-                    <div key={index} className="flex flex-row-reverse gap-5">
-
-                        {/* Right: dot + line */}
-                        <div className="flex flex-col items-center ">
-                            <GoDotFill size={20} className="shrink-0" />
-                            {index !== 1 && (
-                                <div className="w-px flex-1 bg-white my-1" />
-                            )}
+            {/* Mobile Cycling Timeline */}
+            <div className="md:hidden fixed top-35 left-1/2 transform -translate-x-1/2 -translate-y-1/2 fade-in w-[90vw]">
+                <div className={`flex flex-col items-center text-center transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+                    <span className="ND text-3xl text-white/60">{timelineData[currentTimelineIndex].year}</span>
+                    <span className="SG text-base font-bold mt-2">{timelineData[currentTimelineIndex].text}</span>
+                    {timelineData[currentTimelineIndex].tech && (
+                        <div className="flex flex-wrap gap-2 mt-4 justify-center">
+                            {timelineData[currentTimelineIndex].tech.map((tech, i) => (
+                                <span
+                                    key={i}
+                                    className="text-xs px-3 py-1 rounded-full bg-white/10 text-white/80 backdrop-blur-sm"
+                                >
+                                    {tech}
+                                </span>
+                            ))}
                         </div>
-
-                        {/* Left: text */}
-                        <div className="flex flex-col pb-6 text-right">
-                            <span className='ND text-xs'>{item.year}</span>
-                            <span className='SG text-sm'>{item.text}</span>
-                            {item.tech && (
-                                <div className="flex flex-wrap  gap-1 mt-2">
-                                    {item.tech.map((tech, i) => (
-                                        <span
-                                            key={i}
-                                            className="text-[10px] px-2 py-0 rounded-full bg-white/10 text-white/80"
-                                        >
-                                            {tech}
-                                        </span>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-
-                    </div>
-                ))}
-            </div>
-            <div className="fixed bottom-20 left-10 flex flex-col md:hidden w-[85vw] fade-in [--delay:800ms]">
-                {timelineData.slice(2, 4).map((item, index) => (
-                    <div key={index} className="flex flex-row gap-5">
-
-                        {/* Left: dot + line */}
-                        <div className="flex flex-col items-center">
-                            <GoDotFill size={20} className="shrink-0" />
-                            {index !== 1 && (
-                                <div className="w-px flex-1 bg-white my-1" />
-                            )}
-                        </div>
-
-                        {/* Right: text */}
-                        <div className="flex flex-col pb-4 text-left">
-                            <span className='ND text-xs'>{item.year}</span>
-                            <span className='SG text-sm'>{item.text}</span>
-                            {item.tech && (
-                                <div className="flex flex-wrap  gap-1 mt-2">
-                                    {item.tech.map((tech, i) => (
-                                        <span
-                                            key={i}
-                                            className="text-[10px] px-2 py-0 rounded-full bg-white/10 text-white/80"
-                                        >
-                                            {tech}
-                                        </span>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-
-                    </div>
-                ))}
+                    )}
+                </div>
             </div>
             <Spotlight />
 
@@ -260,7 +227,7 @@ function About() {
                     </pre>
                 </Spotlight.Target>
 
-                <p className="SG fade-in [--delay:100ms] text-xs md:text-base">
+                <p className="SG fade-in [--delay:100ms] text-xs md:text-base fixed md:static top-1/2 md:top-auto -translate-y-1/2 md:translate-y-0 w-[60vw] md:w-auto">
                     I build things at the intersection of code, design, and curiosity. <br />
                     Music on repeat, hands on the keyboard, always learning by doing. <br />
                     BTech Computer Technology @ YCCE, Nagpur. <br />
