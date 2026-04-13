@@ -224,7 +224,7 @@ function Works() {
                 </div>
 
 
-                <div className="fixed z-50 md:z-auto md:right-12 left-1/2 -translate-x-1/2  md:translate-x-0 top-40 md:top-28 text-right fade-in p-3 md:p-0 w-full md:w-auto -mt-10">
+                <div className="fixed z-50 md:z-auto md:right-12 left-1/2 -translate-x-1/2  md:translate-x-0 top-50 md:top-28 text-right fade-in p-3 md:p-0 w-full md:w-auto -mt-10">
                     {/* --- DESKTOP TITLE REEL --- */}
 
                     <Spotlight.Target mode="inline" className="w-fit ml-auto">
