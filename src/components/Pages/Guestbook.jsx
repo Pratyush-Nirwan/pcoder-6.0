@@ -6,6 +6,7 @@ import { TiDelete } from "react-icons/ti";
 import { MdCheckCircle } from "react-icons/md";
 import { setCookie } from "../CookieUtils";
 import { supabase, signInWithGitHub, getSession, signOut } from "../Supabase";
+import { Helmet } from 'react-helmet-async';
 
 function Guestbook({ selectedPage }) {
     setCookie("page", "guestbook");
@@ -235,6 +236,15 @@ function Guestbook({ selectedPage }) {
 
     return (
         <>
+            <Helmet>
+                <title>Guestbook - Leave a Message for Pratyush Nirwan</title>
+                <meta name="description" content="Sign in with GitHub and leave a message in Pratyush Nirwan's guestbook. Connect with fellow developers and share your thoughts." />
+                <meta name="keywords" content="Pratyush Nirwan, Guestbook, Contact, GitHub, Messages, Developer Community" />
+                <meta property="og:title" content="Guestbook - Pratyush Nirwan" />
+                <meta property="og:description" content="Leave a message and connect with the developer community." />
+                <meta property="og:url" content="https://pratyushnirwan.dev/guestbook" />
+                <link rel="canonical" href="https://pratyushnirwan.dev/guestbook" />
+            </Helmet>
             <Spotlight />
             <div className="h-full min-h-0 flex flex-col p-4 md:p-10 md:pt-20">
                 <div className="flex flex-col md:flex-row md:items-start gap-3 md:gap-5 flex-1 min-h-0">

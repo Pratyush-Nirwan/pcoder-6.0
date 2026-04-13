@@ -1,9 +1,47 @@
 import Arrow from "./Arrow";
 import Spotlight from "../Spotlight";
 import { MdOutlineSwipeVertical } from "react-icons/md";
+import { Helmet } from 'react-helmet-async';
+
 function Home() {
     return (
         <>
+            <Helmet>
+                <title>Pratyush Nirwan - Full-Stack Developer | Home</title>
+                <meta name="description" content="Welcome to Pratyush Nirwan's portfolio. Full-Stack Developer specializing in React, Node.js, and modern web technologies. Explore my work and get in touch." />
+                <meta name="keywords" content="Pratyush Nirwan, Full-Stack Developer, React, Node.js, Portfolio, Web Development" />
+                <meta property="og:title" content="Pratyush Nirwan - Full-Stack Developer" />
+                <meta property="og:description" content="Designing & building expressive web interfaces. Explore my portfolio and projects." />
+                <meta property="og:url" content="https://pratyushnirwan.dev/" />
+                <meta property="og:type" content="website" />
+                <link rel="canonical" href="https://pratyushnirwan.dev/" />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Person",
+                        "name": "Pratyush Nirwan",
+                        "jobTitle": "Full-Stack Developer",
+                        "url": "https://pratyushnirwan.dev",
+                        "sameAs": [
+                            "https://github.com/pratyush-nirwan",
+                            "https://www.linkedin.com/in/pratyush-nirwan/"
+                        ],
+                        "knowsAbout": [
+                            "JavaScript",
+                            "React",
+                            "Node.js",
+                            "MongoDB",
+                            "Supabase",
+                            "Tailwind CSS",
+                            "Web Development"
+                        ],
+                        "alumniOf": {
+                            "@type": "EducationalOrganization",
+                            "name": "YCCE, Nagpur"
+                        }
+                    })}
+                </script>
+            </Helmet>
             <Spotlight />
             <div className="relative z-10 flex flex-col mt-[10vh] md:mt-0 md:justify-center gap-2  p-5 md:pl-10 h-full">
                 <Spotlight.Target mode="inline" className="w-fit">

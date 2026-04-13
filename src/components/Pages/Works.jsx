@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { Helmet } from 'react-helmet-async';
 
 import { MdArrowOutward } from "react-icons/md";
 import { FaReact, FaHtml5, FaCss3Alt } from "react-icons/fa";
@@ -207,6 +208,41 @@ function Works() {
     }, []);
     return (
         <>
+            <Helmet>
+                <title>Works - Pratyush Nirwan Portfolio Projects</title>
+                <meta name="description" content="Explore Pratyush Nirwan's portfolio of web development projects. Full-stack applications built with React, Node.js, Supabase, and modern technologies." />
+                <meta name="keywords" content="Pratyush Nirwan, Portfolio, Projects, React, Node.js, Web Development, Full-Stack" />
+                <meta property="og:title" content="Works - Pratyush Nirwan Portfolio" />
+                <meta property="og:description" content="Discover innovative web projects and applications in my portfolio." />
+                <meta property="og:url" content="https://pratyushnirwan.dev/works" />
+                <link rel="canonical" href="https://pratyushnirwan.dev/works" />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "ItemList",
+                        "name": "Pratyush Nirwan's Projects",
+                        "description": "Portfolio of web development projects",
+                        "url": "https://pratyushnirwan.dev/works",
+                        "numberOfItems": projectsData.length,
+                        "itemListElement": projectsData.map((project, index) => ({
+                            "@type": "ListItem",
+                            "position": index + 1,
+                            "item": {
+                                "@type": "SoftwareApplication",
+                                "name": project.name,
+                                "description": project.overview,
+                                "url": project.links.demo,
+                                "applicationCategory": "WebApplication",
+                                "operatingSystem": "Web Browser",
+                                "author": {
+                                    "@type": "Person",
+                                    "name": "Pratyush Nirwan"
+                                }
+                            }
+                        }))
+                    })}
+                </script>
+            </Helmet>
             <Spotlight />
             <div
                 id="works-scroll-container"
