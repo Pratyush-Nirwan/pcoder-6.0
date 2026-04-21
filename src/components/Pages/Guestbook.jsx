@@ -237,10 +237,10 @@ function Guestbook({ selectedPage }) {
     return (
         <>
             <Helmet>
-                <title>Guestbook - Leave a Message for Pratyush Nirwan</title>
+                <title>Pratyush Nirwan | Guestbook</title>
                 <meta name="description" content="Sign in with GitHub and leave a message in Pratyush Nirwan's guestbook. Connect with fellow developers and share your thoughts." />
                 <meta name="keywords" content="Pratyush Nirwan, Guestbook, Contact, GitHub, Messages, Developer Community" />
-                <meta property="og:title" content="Guestbook - Pratyush Nirwan" />
+                <meta property="og:title" content="Pratyush Nirwan | Guestbook" />
                 <meta property="og:description" content="Leave a message and connect with the developer community." />
                 <meta property="og:url" content="https://pratyushnirwan.dev/guestbook" />
                 <link rel="canonical" href="https://pratyushnirwan.dev/guestbook" />

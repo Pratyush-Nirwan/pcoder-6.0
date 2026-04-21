@@ -209,10 +209,10 @@ function Works() {
     return (
         <>
             <Helmet>
-                <title>Works - Pratyush Nirwan Portfolio Projects</title>
+                <title>Pratyush Nirwan | Works</title>
                 <meta name="description" content="Explore Pratyush Nirwan's portfolio of web development projects. Full-stack applications built with React, Node.js, Supabase, and modern technologies." />
                 <meta name="keywords" content="Pratyush Nirwan, Portfolio, Projects, React, Node.js, Web Development, Full-Stack" />
-                <meta property="og:title" content="Works - Pratyush Nirwan Portfolio" />
+                <meta property="og:title" content="Pratyush Nirwan | Works" />
                 <meta property="og:description" content="Discover innovative web projects and applications in my portfolio." />
                 <meta property="og:url" content="https://pratyushnirwan.dev/works" />
                 <link rel="canonical" href="https://pratyushnirwan.dev/works" />

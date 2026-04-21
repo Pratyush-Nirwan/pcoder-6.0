@@ -95,10 +95,10 @@ function About() {
     return (
         <div className="relative z-10 flex flex-col w-full h-full pt-10 md:pt-24 gap-6 px-10 overflow-auto no-scrollbar text-justify">
             <Helmet>
-                <title>About Pratyush Nirwan - Full-Stack Developer Journey</title>
+                <title>Pratyush Nirwan | About</title>
                 <meta name="description" content="Learn about Pratyush Nirwan's journey as a Full-Stack Developer. From foundational web development to advanced React applications and backend systems." />
                 <meta name="keywords" content="Pratyush Nirwan, About, Developer Journey, React, Node.js, Timeline, Skills" />
-                <meta property="og:title" content="About Pratyush Nirwan - Developer Journey" />
+                <meta property="og:title" content="Pratyush Nirwan | About" />
                 <meta property="og:description" content="Explore my development journey from HTML/CSS basics to full-stack applications." />
                 <meta property="og:url" content="https://pratyushnirwan.dev/about" />
                 <link rel="canonical" href="https://pratyushnirwan.dev/about" />

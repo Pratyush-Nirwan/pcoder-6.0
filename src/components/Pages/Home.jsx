@@ -7,10 +7,10 @@ function Home() {
     return (
         <>
             <Helmet>
-                <title>Pratyush Nirwan - Full-Stack Developer</title>
+                <title>Pratyush Nirwan | Full-Stack Developer</title>
                 <meta name="description" content="Welcome to Pratyush Nirwan's portfolio. Full-Stack Developer specializing in React, Node.js, and modern web technologies. Explore my work and get in touch." />
                 <meta name="keywords" content="Pratyush Nirwan, Full-Stack Developer, React, Node.js, Portfolio, Web Development" />
-                <meta property="og:title" content="Pratyush Nirwan - Full-Stack Developer" />
+                <meta property="og:title" content="Pratyush Nirwan | Full-Stack Developer" />
                 <meta property="og:description" content="Designing & building expressive web interfaces. Explore my portfolio and projects." />
                 <meta property="og:url" content="https://pratyushnirwan.dev/" />
                 <meta property="og:type" content="website" />
