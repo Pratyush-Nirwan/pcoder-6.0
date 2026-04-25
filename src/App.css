@@ -157,6 +157,10 @@ body {
   animation: corner-reveal-br 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+.corner-br-out {
+  animation: corner-reveal-br 0.6s cubic-bezier(0.16, 1, 0.3, 1) reverse both;
+}
+
 @keyframes corner-reveal-bl {
   from {
     opacity: 0;
@@ -171,6 +175,10 @@ body {
 
 .corner-bl {
   animation: corner-reveal-bl 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.corner-bl-out {
+  animation: corner-reveal-bl 0.6s cubic-bezier(0.16, 1, 0.3, 1) reverse both;
 }
 
 @keyframes corner-reveal-tr {
@@ -189,6 +197,10 @@ body {
   animation: corner-reveal-tr 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+.corner-tr-out {
+  animation: corner-reveal-tr 0.6s cubic-bezier(0.16, 1, 0.3, 1) reverse both;
+}
+
 @keyframes corner-reveal-tl {
   from {
     opacity: 0;
@@ -203,6 +215,10 @@ body {
 
 .corner-tl {
   animation: corner-reveal-tl 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.corner-tl-out {
+  animation: corner-reveal-tl 0.6s cubic-bezier(0.16, 1, 0.3, 1) reverse both;
 }
 
 @keyframes slide-up {
@@ -221,6 +237,10 @@ body {
   animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+.slide-up-out {
+  animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) reverse both;
+}
+
 @keyframes slide-down {
   from {
     opacity: 0;
@@ -235,6 +255,10 @@ body {
 
 .slide-down {
   animation: slide-down 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.slide-down-out {
+  animation: slide-down 0.6s cubic-bezier(0.16, 1, 0.3, 1) reverse both;
 }
 
 @keyframes slide-left {
@@ -253,6 +277,10 @@ body {
   animation: slide-left 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+.slide-left-out {
+  animation: slide-left 0.6s cubic-bezier(0.16, 1, 0.3, 1) reverse both;
+}
+
 @keyframes slide-right {
   from {
     opacity: 0;
@@ -267,4 +295,8 @@ body {
 
 .slide-right {
   animation: slide-right 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.slide-right-out {
+  animation: slide-right 0.6s cubic-bezier(0.16, 1, 0.3, 1) reverse both;
 }
