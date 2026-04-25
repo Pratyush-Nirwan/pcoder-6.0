@@ -168,7 +168,7 @@ function GuestBook({ selectedPage }) {
                         <span className="text-center">:</span>
                         <span className="flex-1">sign in to leave a message</span>
                         <button onClick={signInWithGitHub}
-                            className="bg-white text-black px-2 py-1 rounded-2xl flex items-center gap-1">
+                            className="bg-white text-black px-2 py-1 rounded-2xl flex items-center gap-1 cursor-pointer">
                             <FaGithub size={12} /> SIGN IN
                         </button>
                     </div>
@@ -186,9 +186,9 @@ function GuestBook({ selectedPage }) {
                             className="font-mono text-sm"
                         />
                         <div className="flex justify-end gap-2 items-center">
-                            <MdCheckCircle size={18} onClick={handleSubmit} />
+                            <MdCheckCircle size={18} onClick={handleSubmit} className="cursor-pointer" />
                             <button onClick={signOut}
-                                className="bg-white text-black px-2 py-1 rounded-2xl">
+                                className="bg-white text-black px-2 py-1 rounded-2xl cursor-pointer">
                                 SignOut
                             </button>
                         </div>
@@ -200,9 +200,9 @@ function GuestBook({ selectedPage }) {
                         <span className="text-center">:</span>
                         <span>{userMessage}</span>
                         <div className="flex justify-end gap-2 items-center">
-                            <TiDelete size={16} onClick={() => handleDelete(userMessageId)} />
+                            <TiDelete size={16} onClick={() => handleDelete(userMessageId)} className="cursor-pointer" />
                             <button onClick={signOut}
-                                className="bg-white text-black px-2 py-1 rounded-2xl">
+                                className="bg-white text-black px-2 py-1 rounded-2xl cursor-pointer ">
                                 SignOut
                             </button>
                         </div>
