@@ -1,5 +1,16 @@
 [
     {
+        "name": "Forestly",
+        "overview": "Forestly is a not just another habit tracker. psstt...hint: Habit Tracker + Trees Coming soon!!",
+        "tech_stack": "React, Tailwind CSS, Threejs",
+        "image": "forestly.webp",
+        "coming_soon": true,
+        "links": {
+            "github": "",
+            "demo": ""
+        }
+    },
+    {
         "name": "Save Stride",
         "overview": "Save Stride is a simple one-page React web application that helps users track a money-saving goal visually. At the top of the page, a dynamic progress bar shows how much of the goal has been completed. Users can add or remove savings, and every action is recorded in a transaction list with timestamps. The app is intentionally minimal, fast, and distraction-free—focused purely on building a consistent saving habit.",
         "tech_stack": "React, JavaScript, HTML5, Tailwind CSS, Vite",

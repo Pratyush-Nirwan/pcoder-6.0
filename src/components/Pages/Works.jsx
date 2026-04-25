@@ -7,7 +7,7 @@ import { FaReact, FaHtml5, FaCss3Alt } from "react-icons/fa";
 import { SiJavascript, SiTailwindcss, SiVite } from "react-icons/si";
 import { AiOutlineApi } from "react-icons/ai";
 import { PiMouseScroll } from "react-icons/pi";
-
+import { TbBrandThreejs } from "react-icons/tb";
 import projectsData from "../../assets/Projects.json";
 import { worksState } from "../worksState";
 import Spotlight from "../Spotlight";
@@ -32,6 +32,7 @@ function Works() {
                     .map((stack) => stack.trim())
                     .filter(Boolean),
                 image: p?.image ?? "",
+                coming_soon: Boolean(p?.coming_soon), // 👈 check here
                 links: {
                     github: p?.links?.github ?? "",
                     demo: p?.links?.demo ?? "",
@@ -45,6 +46,7 @@ function Works() {
         javascript: SiJavascript,
         js: SiJavascript,
         html5: FaHtml5,
+        threejs: TbBrandThreejs,
         html: FaHtml5,
         css3: FaCss3Alt,
         css: FaCss3Alt,
@@ -287,7 +289,14 @@ function Works() {
                                             className={`SG inline-block transform-gpu origin-right font-bold text-2xl md:text-3xl ${isActive ? "text-white" : "text-transparent bg-clip-text bg-linear-to-t from-white/0 to-white"}`}
                                         >
 
-                                            {p?.name ?? ""}
+                                            <span className="flex items-center gap-2 justify-end">
+                                                {p?.name ?? ""}
+                                                {p?.coming_soon && isActive && (
+                                                    <span className="text-xs absolute rounded-full scale-90 text-pink-500 -top-0.5 -right-5 font-bold whitespace-nowrap ND rotate-25 corner-tr  [text-shadow:0_2px_6px_rgba(0,0,0,0.8)] animate-pulse">
+                                                        Coming Soon
+                                                    </span>
+                                                )}
+                                            </span>
                                         </motion.button>
 
                                     </div>
@@ -354,8 +363,23 @@ function Works() {
                 {/* Mobile Footer Links */}
                 <div className="md:hidden fixed bottom-10 left-1/2 -translate-x-1/2 w-[97vw] flex justify-between items-center px-4 z-50">
                     <div className="flex gap-10">
-                        <a className="font-bold text-xs flex items-center gap-1 fade-in [--delay:200ms]" href={currentProject?.links?.demo}>LIVE <MdArrowOutward /></a>
-                        <a className="font-bold text-xs flex items-center gap-1 fade-in" href={currentProject?.links?.github}>GITHUB <MdArrowOutward /></a>
+                        {currentProject?.links?.demo && (
+                            <a
+                                className="font-bold text-xs flex items-center gap-1 fade-in [--delay:200ms]"
+                                href={currentProject.links.demo}
+                            >
+                                LIVE <MdArrowOutward />
+                            </a>
+                        )}
+
+                        {currentProject?.links?.github && (
+                            <a
+                                className="font-bold text-xs flex items-center gap-1 fade-in"
+                                href={currentProject.links.github}
+                            >
+                                GITHUB <MdArrowOutward />
+                            </a>
+                        )}
                     </div>
                     <div className="flex gap-2">
                         {getTechIcons(currentProject?.tech_stack, 18)}
@@ -407,8 +431,23 @@ function Works() {
             `}>
                     <div className="hidden md:absolute -top-10 left-0 w-full md:flex justify-between items-center px-4 z-50 pointer-events-auto">
                         <div className="flex flex-row gap-10">
-                            <a className="font-bold text-lg flex items-center gap-1 fade-in [--delay:200ms] transition-colors duration-200 text-white/70 hover:text-white md:hover:text-white" href={currentProject?.links?.demo}>LIVE <MdArrowOutward /></a>
-                            <a className="font-bold text-lg flex items-center gap-1 fade-in [--delay:400ms] transition-colors duration-200 text-white/70 hover:text-white md:hover:text-white" href={currentProject?.links?.github}>GITHUB <MdArrowOutward /></a>
+                            {currentProject?.links?.demo && (
+                                <a
+                                    className="font-bold text-lg flex items-center gap-1 fade-in [--delay:200ms] text-white/70 hover:text-white"
+                                    href={currentProject.links.demo}
+                                >
+                                    LIVE <MdArrowOutward />
+                                </a>
+                            )}
+
+                            {currentProject?.links?.github && (
+                                <a
+                                    className="font-bold text-lg flex items-center gap-1 fade-in [--delay:400ms] text-white/70 hover:text-white"
+                                    href={currentProject.links.github}
+                                >
+                                    GITHUB <MdArrowOutward />
+                                </a>
+                            )}
                         </div>
                         <div className="flex gap-2 text-lg fade-in [--delay:800ms] pointer-events-none">
                             {getTechIcons(currentProject?.tech_stack, 25)}
