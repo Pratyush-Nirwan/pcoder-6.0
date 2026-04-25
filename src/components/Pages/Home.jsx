@@ -2,8 +2,26 @@ import Arrow from "./Arrow";
 import Spotlight from "../Spotlight";
 import { MdOutlineSwipeVertical } from "react-icons/md";
 import { Helmet } from 'react-helmet-async';
-
+import ContactForm from "../Form";
+import { useState } from "react";
 function Home() {
+    const [showForm, setShowForm] = useState(false)
+    const [isHidden, setIsHidden] = useState(true);
+    const openForm = () => {
+        setIsHidden(false);
+
+        // small delay to ensure DOM updates before animation
+        setTimeout(() => {
+            setShowForm(true);
+        }, 10);
+    };
+    const closeForm = () => {
+        setShowForm(false); // triggers your OUT animation
+
+        setTimeout(() => {
+            setIsHidden(true); // apply hidden AFTER animation
+        }, 300); // match your animation duration
+    };
     return (
         <>
             <Helmet>
@@ -83,7 +101,8 @@ function Home() {
                         <Arrow className="h-20 w-20 -translate-x-20 translate-y-5 rotate-20 text-white/70 opacity-70 fade-in [--delay:300ms] [clip-path:inset(50%_0_0_0)]" />
                     </div>
 
-                    <div className="bg-black p-5 rounded-tl-3xl
+                    <div className={`bg-black p-5 rounded-tl-3xl
+                      ${showForm ? "corner-br-out" : "corner-br"}
           before:absolute before:content-[''] before:w-10 before:h-10
           before:bottom-0 before:-left-10 before:rounded-br-3xl
           before:shadow-[0.5rem_0.8rem_black]
@@ -91,19 +110,34 @@ function Home() {
           after:absolute after:content-[''] after:w-10 after:h-10
           after:-top-10 after:right-0 after:rounded-br-3xl
           after:shadow-[0.5rem_0.8rem_black] corner-br
-        "
+        `}
                     >
                         <h2
                             role="button"
                             tabIndex={0}
-                            onClick={() => (window.location.href = "mailto:pratyushnirwan123@gmail.com?subject=Hiring%20Inquiry&body=Hi%20Pratyush%2C%0A%0AI%20would%20like%20to%20discuss%20an%20oppurtunity.")}
-
+                            onClick={() => setShowForm(true)}
                             className="SG text-2xl text-white/60 transition-all hover:text-white cursor-pointer">Hire Me</h2>
                     </div>
-                </div>
-            </div>
 
-            <div className="fixed bottom-5 right-27 z-20 hidden pointer-events-none md:flex">
+                </div>
+                <div className={`bg-black p-5 rounded-tl-3xl fixed bottom-3 right-2 ${isHidden ? "hidden" : ""}
+                    ${showForm ? "corner-br inline" : "corner-br-out"}
+          before:absolute before:content-[''] before:w-10 before:h-10
+          before:bottom-0 before:-left-10 before:rounded-br-3xl
+          before:shadow-[0.5rem_0.8rem_black]
+
+          after:absolute after:content-[''] after:w-10 after:h-10
+          after:-top-10 after:right-0 after:rounded-br-3xl
+          after:shadow-[0.5rem_0.8rem_black] corner-br
+
+`}
+                >
+                    <ContactForm onClose={closeForm} />
+                </div>
+            </div >
+
+            <div className={`fixed ${showForm ? "corner-br-out" : "corner-br"}
+             bottom-5 right-27 z-20 hidden pointer-events-none md:flex`}>
                 <p className="ND absolute text-2xl text-nowrap -translate-x-30 translate-y-10 -rotate-20 fade-in [--delay:200ms]">Lets Work Together</p>
                 <Arrow className=" h-32 w-32 text-white/70 opacity-70" />
             </div>
