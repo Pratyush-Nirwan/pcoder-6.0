@@ -1,7 +1,7 @@
 [
     {
         "name": "Forestly",
-        "overview": "Forestly is a not just another habit tracker. psstt...hint: Habit Tracker + Trees Coming soon!!",
+        "overview": "Forestly is not just another habit tracker.\npsstt... hint: Habit Tracker + Trees\nComing soon!!",
         "tech_stack": "React, Tailwind CSS, Threejs",
         "image": "forestly.webp",
         "coming_soon": true,

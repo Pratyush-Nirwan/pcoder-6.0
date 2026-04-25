@@ -338,7 +338,7 @@ function Works() {
                                     <code className="font-inherit">{`<p>`}</code>
                                 </pre>
                             </Spotlight.Target>
-                            <p className="SG text-white/70 text-md md:text-xl mt-5 max-w-lg ml-auto fade-in text-left px-4 md:px-0">
+                            <p className="SG text-white/70 text-md md:text-xl mt-5 max-w-lg ml-auto fade-in text-left px-4 md:px-0 whitespace-pre-line">
                                 {currentProject.overview}
                             </p>
                             <Spotlight.Target mode="inline" className="w-fit ml-auto">
