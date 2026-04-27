@@ -3,8 +3,9 @@ import Spotlight from "../Spotlight";
 import { MdOutlineSwipeVertical } from "react-icons/md";
 import { Helmet } from 'react-helmet-async';
 import ContactForm from "../Form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 function Home() {
+    const [isMobile, setIsMobile] = useState(false);
     const [showForm, setShowForm] = useState(false)
     const [isHidden, setIsHidden] = useState(true);
     const openForm = () => {
@@ -22,6 +23,15 @@ function Home() {
             setIsHidden(true); // apply hidden AFTER animation
         }, 300); // match your animation duration
     };
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+
     return (
         <>
             <Helmet>
@@ -120,15 +130,16 @@ function Home() {
                     </div>
 
                 </div>
-                <div className={`bg-black p-5 rounded-tl-3xl fixed bottom-3 right-2 ${isHidden ? "hidden" : ""}
-                    ${showForm ? "corner-br inline" : "corner-br-out"}
+                <div className={`bg-black p-5 rounded-tl-3xl fixed bottom-3 right-1/2 translate-x-1/2 md:translate-x-0 md:right-2 ${isHidden ? "hidden" : ""}
+                    ${showForm ? (isMobile ? "slide-up inline" : "corner-br inline") : "md:corner-br-out slide-out"}
           before:absolute before:content-[''] before:w-10 before:h-10
-          before:bottom-0 before:-left-10 before:rounded-br-3xl
-          before:shadow-[0.5rem_0.8rem_black]
+          md:before:bottom-0 md:before:top-auto before:-top-10 md:before:-left-10 before:left-2.25 md:before:rounded-br-3xl before:rounded-bl-3xl
+          md:before:shadow-[0.9rem_0.8rem_black]
+          before:shadow-[-0.9rem_0.8rem_black]
 
           after:absolute after:content-[''] after:w-10 after:h-10
-          after:-top-10 after:right-0 after:rounded-br-3xl
-          after:shadow-[0.5rem_0.8rem_black] corner-br
+          after:-top-10 md:after:right-0 after:right-2.25 after:rounded-br-3xl
+          after:shadow-[0.9rem_0.8rem_black] corner-br
 
 `}
                 >

@@ -129,7 +129,7 @@ export default function ContactForm({
     };
 
     return (
-        <div id="hire-contact-form" className="w-[25vw] text-white">
+        <div id="hire-contact-form" className="w-[90vw] md:w-[25vw] text-white">
 
             <div className="mb-6 flex items-center justify-between gap-4">
                 <div>
@@ -187,8 +187,10 @@ export default function ContactForm({
                         aria-busy={isSubmitting}
                     >
                         <div>
-                            <label className="SG mb-2 block text-sm text-white/70">
-                                Name
+                            <label className="SG mb-2 text-sm text-white/70 flex items-center justify-between">
+                                Name {errors.name && (
+                                    <span className="text-sm text-red-300">{errors.name}</span>
+                                )}
                             </label>
                             <input
                                 type="text"
@@ -199,14 +201,14 @@ export default function ContactForm({
                                 disabled={isSubmitting}
                                 className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition-[border-color,background-color,opacity] duration-200 placeholder:text-white/35 focus:border-white/35 disabled:cursor-not-allowed disabled:opacity-60"
                             />
-                            {errors.name && (
-                                <p className="mt-2 text-sm text-red-300">{errors.name}</p>
-                            )}
+
                         </div>
 
                         <div>
-                            <label className="SG mb-2 block text-sm text-white/70">
-                                Email
+                            <label className="SG mb-2 text-sm text-white/70 flex justify-between items-center">
+                                Email {errors.email && (
+                                    <span className="text-sm text-red-300">{errors.email}</span>
+                                )}
                             </label>
                             <input
                                 type="email"
@@ -217,14 +219,14 @@ export default function ContactForm({
                                 disabled={isSubmitting}
                                 className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition-[border-color,background-color,opacity] duration-200 placeholder:text-white/35 focus:border-white/35 disabled:cursor-not-allowed disabled:opacity-60"
                             />
-                            {errors.email && (
-                                <p className="mt-2 text-sm text-red-300">{errors.email}</p>
-                            )}
+
                         </div>
 
                         <div>
-                            <label className="SG mb-2 block text-sm text-white/70">
-                                Message
+                            <label className="SG mb-2 text-sm text-white/70 flex justify-between items-center">
+                                Message {errors.message && (
+                                    <span className="text-sm text-red-300">{errors.message}</span>
+                                )}
                             </label>
                             <textarea
                                 name="message"
@@ -235,9 +237,6 @@ export default function ContactForm({
                                 className="min-h-32 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition-[border-color,background-color,opacity] duration-200 placeholder:text-white/35 focus:border-white/35 disabled:cursor-not-allowed disabled:opacity-60"
                                 rows={5}
                             />
-                            {errors.message && (
-                                <p className="mt-2 text-sm text-red-300">{errors.message}</p>
-                            )}
                         </div>
 
                         <AnimatePresence>
