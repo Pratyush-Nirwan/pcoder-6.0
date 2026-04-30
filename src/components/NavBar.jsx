@@ -11,7 +11,7 @@ function NavBar() {
         "bg-white text-black";
 
     return (
-        <div
+        <nav
             id="navbar"
             className="SG absolute z-20 md:flex justify-between items-center w-full h-15 left-0 hidden "
         >
@@ -78,7 +78,7 @@ function NavBar() {
           before:rounded-tl-3xl
           before:shadow-[-0.5rem_-0.8rem_black]"
             />
-        </div>
+        </nav>
     );
 }
 
