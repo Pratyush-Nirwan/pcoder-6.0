@@ -4,6 +4,16 @@
   color: white;
 }
 
+button,
+input,
+textarea,
+select {
+  color: inherit;
+  font-family: inherit;
+}
+
+
+
 .SG {
   font-family: "Space Grotesk", sans-serif;
 }
