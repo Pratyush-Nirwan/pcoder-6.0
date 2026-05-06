@@ -8,7 +8,7 @@ function NavBar() {
         "text-white/60 hover:text-white";
 
     const active =
-        "bg-white text-black";
+        "bg-white !text-black";
 
     return (
         <nav

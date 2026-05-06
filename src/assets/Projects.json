@@ -1,7 +1,7 @@
 [
     {
         "name": "Forestly",
-        "overview": "Forestly is not just another habit tracker.\npsstt... hint: Habit Tracker + Trees\nComing soon!!",
+        "overview": "A habit-tracking app that turns your progress into a growing 3D forest. Each completed habit plants a tree, creating a visual record of your growth. Built with Three.js, it features an interactive world, dynamic day/night cycles, and a responsive design with persistent state across sessions.",
         "tech_stack": "React, Tailwind CSS, Threejs",
         "image": "forestly.webp",
         "coming_soon": true,
