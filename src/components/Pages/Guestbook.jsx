@@ -169,7 +169,7 @@ function Guestbook({ selectedPage }) {
                     <p className="text-white leading-snug text-xl ND">Sign in to leave a message</p>
                     <button
                         onClick={signInWithGitHub}
-                        className="mt-1 self-start px-5 py-2 rounded-xl bg-white text-black font-bold text-base flex items-center gap-2 cursor-pointer hover:bg-white/80 transition-colors duration-200"
+                        className="mt-1 self-start px-5 py-2 rounded-xl bg-white !text-black font-bold text-base flex items-center gap-2 cursor-pointer hover:bg-white/80 transition-colors duration-200"
                     >
                         <FaGithub size={16} /> Sign in
                     </button>
@@ -204,7 +204,7 @@ function Guestbook({ selectedPage }) {
                         />
                         <button
                             onClick={signOut}
-                            className="px-4 py-1 rounded-xl bg-white text-black font-bold text-xs cursor-pointer hover:bg-white/80 transition-colors duration-200"
+                            className="px-4 py-1 rounded-xl bg-white !text-black font-bold text-xs cursor-pointer hover:bg-white/80 transition-colors duration-200"
                         >
                             Sign Out
                         </button>
@@ -225,7 +225,7 @@ function Guestbook({ selectedPage }) {
                     />
                     <button
                         onClick={signOut}
-                        className="px-4 py-1 rounded-xl bg-white text-black font-bold text-xs cursor-pointer hover:bg-white/80 transition-colors duration-200"
+                        className="px-4 py-1 rounded-xl bg-white !text-black font-bold text-xs cursor-pointer hover:bg-white/80 transition-colors duration-200"
                     >
                         Sign Out
                     </button>

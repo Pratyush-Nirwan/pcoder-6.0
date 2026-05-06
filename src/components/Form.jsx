@@ -266,7 +266,7 @@ export default function ContactForm({
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className={`SG w-full rounded-2xl px-4 py-3 font-medium text-black transition-all duration-200 ${isSubmitting
+                                className={`SG w-full rounded-2xl px-4 py-3 font-medium !text-black transition-all duration-200 ${isSubmitting
                                     ? "cursor-not-allowed bg-white/70 text-black/70"
                                     : "cursor-pointer bg-white hover:bg-white/80"
                                     }`}
